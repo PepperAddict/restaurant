@@ -24,6 +24,7 @@ window.initMap = () => {
  * Get current restaurant from page URL.
  */
 fetchRestaurantFromURL = (callback) => {
+
   if (self.restaurant) { // restaurant already fetched!
     callback(null, self.restaurant)
     return;
@@ -32,6 +33,7 @@ fetchRestaurantFromURL = (callback) => {
   if (!id) { // no id found in URL
     error = 'No restaurant id in URL'
     callback(error, null);
+    
   } else {
     DBHelper.fetchRestaurantById(id, (error, restaurant) => {
       self.restaurant = restaurant;
@@ -41,9 +43,12 @@ fetchRestaurantFromURL = (callback) => {
       }
       fillRestaurantHTML();
       callback(null, restaurant)
+      
     });
   }
 }
+
+
 
 /**
  * Create restaurant HTML and add it to the webpage

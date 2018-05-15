@@ -5,23 +5,38 @@
   <!-- Normalize.css for better cross-browser consistency -->
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <!-- Main CSS file -->
-  <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <link rel="stylesheet" href="css/reststyle.css">
+  <link rel="stylesheet" href="css/common.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Restaurant Info</title>
 </head>
 
 <body class="inside">
+    <label for="search-toggle">
+        <div class="search-icon">Restaurant Reviews</div>
+      </label>
+      
+      <input class="navigation" id="search-toggle" type="checkbox">
+      <div type="checkbox" id="search-toggle">
+           <ul id="breadcrumb" >
+      <li><a href="/">Home</a></li>
+
+      
+    </ul> 
+      </div>
+
+
   <!-- Beginning header -->
   <header>
     <!-- Beginning nav -->
     <nav>
-      <h1><a href="/">Restaurant Reviews</a></h1>
-    </nav>
+
+    
     <!-- Beginning breadcrumb -->
-    <ul id="breadcrumb" >
-      <li><a href="/">Home</a></li>
-    </ul>
+
     <!-- End breadcrumb -->
     <!-- End nav -->
+  </nav>
   </header>
   <!-- End header -->
 
@@ -60,6 +75,7 @@
   <script type="text/javascript" src="js/dbhelper.js"></script>
   <!-- Main javascript file -->
   <script type="text/javascript" src="js/restaurant_info.js"></script>
+  
   <!-- Google Maps -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"></script>
   <!-- End scripts -->

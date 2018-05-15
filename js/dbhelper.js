@@ -103,6 +103,7 @@ class DBHelper {
     });
   }
 
+
   /**
    * Fetch all neighborhoods with proper error handling.
    */
