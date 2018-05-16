@@ -10,6 +10,7 @@
     --blue-color: #0398AD;
     --yellow: #FFCA00;
     --light-blue: #4DB3C2;
+    --mid-gray: #a6a6a6;
   }
   
   body,td,th,p{
@@ -49,6 +50,20 @@
   }
 
   a {
+    color: var(--blue-color);
+    text-decoration: none;
+  }
+
+ footer {
+    color: var(--off-white);
+    font-size: 1.2rem;
+    padding: 25px;
+    text-align: center;
+    text-transform: uppercase;
+    background: var(--dark-gray);
+    margin-top: 1em;
+  }
+  #footer a {
     color: var(--blue-color);
     text-decoration: none;
   }

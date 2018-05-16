@@ -12,31 +12,24 @@
 </head>
 
 <body class="inside">
-    <label for="search-toggle">
-        <div class="search-icon">Restaurant Reviews</div>
-      </label>
-      
-      <input class="navigation" id="search-toggle" type="checkbox">
-      <div type="checkbox" id="search-toggle">
-           <ul id="breadcrumb" >
-      <li><a href="/">Home</a></li>
-
-      
-    </ul> 
-      </div>
 
 
-  <!-- Beginning header -->
-  <header>
-    <!-- Beginning nav -->
-    <nav>
-
-    
-    <!-- Beginning breadcrumb -->
-
-    <!-- End breadcrumb -->
-    <!-- End nav -->
+  <nav>
+      <label for="navi-toggle">
+          <h2 class="navi">NAVIGATION</h2>
+        </label>
+        
+        <input class="navigation" id="navi-toggle" type="checkbox">
+        <div type="checkbox" id="navi-toggle">
+             <ul id="breadcrumb" >
+        <li><a href="/">Home</a></li>
+        
+      </ul> 
+        </div>
   </nav>
+
+  <header>
+        <h1 id="rest-name"></h1>
   </header>
   <!-- End header -->
 
@@ -49,15 +42,19 @@
     <!-- End map -->
     <!-- Beginning restaurant -->
     <section id="restaurant-container">
-      <h1 id="restaurant-name"></h1>
-      <img id="restaurant-img">
-      <p id="restaurant-cuisine"></p>
-      <p id="restaurant-address"></p>
-      <table id="restaurant-hours"></table>
+      <div class="rest-image"><img id="rest-img"></div>
+      <div class="rest-detail"> 
+              <p id="rest-cuisine"></p>
+      <p id="rest-address"></p>
+      <h2>Hours</h2>
+      <table id="rest-hours"></table>
+      </div>
+
     </section>
     <!-- end restaurant -->
     <!-- Beginning reviews -->
     <section id="reviews-container">
+      <h2>Reviews</h2>
       <ul id="reviews-list"></ul>
     </section>
     <!-- End reviews -->

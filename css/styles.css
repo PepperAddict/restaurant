@@ -4,14 +4,6 @@
 @import url('https://fonts.googleapis.com/css?family=Arya|Kanit:800');
 
 
-.container footer {
-  color: var(--off-white);
-  font-size: 1.2em;
-  padding: 25px;
-  text-align: center;
-  text-transform: uppercase;
-  background: var(--dark-gray);
-}
 
 
 /* ================  container ================= */
@@ -225,7 +217,11 @@
   line-height: .5em;
   padding: 3%;
   height: 40px;
+  width: 100%;
   
+}
+.link a:hover, .link:hover a{
+  color: var(--dark-gray);
 }
 
 .link {
@@ -235,7 +231,13 @@
   margin: 0px;
   padding: 1em;
   box-sizing: border-box;
+  transition: .2s;
 }
+
+.link:hover {
+  background: var(--yellow);
+}
+
 
 .restaurant-img {
   background-color: white;
