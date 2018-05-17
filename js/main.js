@@ -169,14 +169,30 @@ createRestaurantHTML = (restaurant) => {
   name.innerHTML = restaurant.name;
   li.append(name);
 
-
+  
   const text = document.createElement('a');
-  const image = document.createElement('img');
-  image.className = 'restaurant-img';
-  image.alt = `Image of ${restaurant.name} in ${restaurant.neighborhood}`;
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  const picture = document.createElement('Picture');
+
+  const webpimg = document.createElement('source');
+  const imgt = document.createElement('source');
+  const img = document.createElement('img');
+
+  webpimg.src = DBHelper.imageUrlWebP(restaurant);
+  webpimg.type = 'image/webp';
+  imgt.src = DBHelper.imageUrlForRestaurant(restaurant);
+  imgt.type = 'image/jpeg'
+
+  img.alt = `Image of ${restaurant.name} in ${restaurant.neighborhood}`;
+  img.src = DBHelper.imageUrlForRestaurant(restaurant);
+
+  picture.appendChild(webpimg);
+  picture.appendChild(imgt)
+  picture.appendChild(img)
+
+  picture.className = 'restaurant-img';
+
   text.href = DBHelper.urlForRestaurant(restaurant);
-  text.appendChild(image);
+  text.appendChild(picture);
   li.append(text);
 
   const neighborhood = document.createElement('p');

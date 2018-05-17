@@ -3,24 +3,25 @@
 
 <head>
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="build/css/style.min.css">
   <!-- <link rel="stylesheet" href="reststyle.css"> -->
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Restaurant Reviews</title>
 </head>
 
-<body>
+<body class="container">
 
-<div class="container">
 
   <header>
-    
-    <div class="box"><h1>Restaurant Reviews</h1></div>
+    <!-- header -->
+    <img src="img/logo.svg">
+    <div class="box">
+      <h1>Restaurant Reviews</h1></div>
     <a href="#restaurants-list" class="hidethis">Skip to filter results</a>
   </header>
-
+  <!-- main-->
   <main id="maincontent">
+    <!-- map -->
     <section id="map-container">
       <div id="map"></div>
     </section>
@@ -28,6 +29,7 @@
     <nav>
     
       <section>
+        <!-- filter options-->
         <div tabindex="0" class="filter-options">
           <h2>Filter Results</h2>
   
@@ -53,7 +55,7 @@
         </div>
         </section>   
     </nav>
-
+    <!-- restaurant lists-->
     <section class="restaurant-items">
       <article>
              <h2>Restaurants</h2>
@@ -67,17 +69,10 @@
     <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
     <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"></script>
-
+  <!-- footer -->
   <footer>
     Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
   </footer>
-
-  </div>
-  
-
-
-  
-
 
 </body>
 

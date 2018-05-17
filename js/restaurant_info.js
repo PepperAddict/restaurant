@@ -10,6 +10,7 @@ window.initMap = () => {
       console.error(error);
     } else {
       self.map = new google.maps.Map(document.getElementById('map'), {
+        title: 'map',
         zoom: 16,
         center: restaurant.latlng,
         scrollwheel: false
@@ -59,9 +60,23 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const address = document.getElementById('rest-address');
   address.innerHTML = `Address: ${restaurant.address}`;
 
+
   const image = document.getElementById('rest-img');
-  image.className = 'rest-img'
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  const webpimg = document.createElement('source');
+  const img = document.createElement('img');
+  const imgt = document.createElement('source');
+  webpimg.src = DBHelper.imageUrlWebP(restaurant);
+  webpimg.type = 'image/webp';
+  imgt.src = DBHelper.imageUrlForRestaurant(restaurant);
+  imgt.type = 'image/jpeg'
+
+  img.alt = `Image of ${restaurant.name} in ${restaurant.neighborhood}`;
+  img.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.appendChild(webpimg);
+  image.appendChild(imgt)
+  image.appendChild(img)
+
+
 
   const cuisine = document.getElementById('rest-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -148,7 +163,7 @@ createReviewHTML = (review) => {
  */
 fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
-  const serverport = `http://localhost:8000/`
+  const serverport = `http://${DBHelper.ADDRESS}/`;
   DBHelper.fetchRestaurants((error, restaurants) => {
     if (error) 
         console.log(error)
@@ -156,21 +171,22 @@ fillBreadcrumb = (restaurant=self.restaurant) => {
       const names = Object.entries(restaurants).forEach(
         ([key, value]) => {
 
+          const li = document.createElement('li');
           const a = document.createElement('a');
           a.innerHTML = `${value.name}`;
-          
           a.href = serverport + 'restaurant.html?id=' + value.id;
           a.target ="_self";
-          breadcrumb.appendChild(a);
+          li.appendChild(a);
+          breadcrumb.appendChild(li);
 
         });
-        var uri = serverport + 'restaurant.html?id=' + restaurant.id;
-        var query = document.querySelectorAll('#breadcrumb a[href="'+uri+'"]');
+        var uri = `${serverport}restaurant.html?id=${restaurant.id}`;
+        var query = document.querySelectorAll('#navi-links a[href="'+uri+'"]');
         for (let i of query) {
           if (i == uri) {
             i.className = 'currentLink';
           }
-          else console.log(i + 'hi' + uri)
+          else console.log(uri + '   ' + i)
         }
     }
 });
