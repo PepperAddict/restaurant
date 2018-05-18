@@ -65,9 +65,9 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const webpimg = document.createElement('source');
   const img = document.createElement('img');
   const imgt = document.createElement('source');
-  webpimg.src = DBHelper.imageUrlWebP(restaurant);
+  webpimg.srcset = DBHelper.imageUrlWebP(restaurant);
   webpimg.type = 'image/webp';
-  imgt.src = DBHelper.imageUrlForRestaurant(restaurant);
+  imgt.srcset = DBHelper.imageUrlForRestaurant(restaurant);
   imgt.type = 'image/jpeg'
 
   img.alt = `Image of ${restaurant.name} in ${restaurant.neighborhood}`;

@@ -1,0 +1,38 @@
+= Mobile Web Specialist Certification Course
+
+== Welcome to my Restaurant Review project
+
+Hello! This is my Udacity Mobile Web Restaurant Review Project! This project was created by Udacity and 
+I am required to modify the page by following the guidelines to pass the tests. The project 
+is divided into 4 stages and each will have their own requirement. 
+
+=== Restaurant Review Stage 1
+This is the current state of the Restaurant Review Project.
+
+* [x] Responsive design - Work well from small screens to large desktop screens.
+* [x] Accessibility - Make sure it is easy to navigate and content have the appropriate names 
+so users can easily identify what is on the page.
+* [x] Implement Service Worker
+
+== To run the server
+
+These are the two servers that I tested and worked well on this project. I personally 
+prefer the *PHP server*. 
+
+=== Python server
+* First you need to make sure you actually have python installed and that it's version 2.x
+** In the terminal, type `python-V` and you should get a version. 
+* Once you confirmed that python is installed and that it's version 2.x , you can easily start a python server
+** Type `python -m SimpleHTTPServer 8000` in the project's directory.
+
+NOTE: There has been a reported bug with python servers reading service worker as 
+text/plain. What can be done to remedy this is change it to a different server port. If you need to do that, 
+you will also need to change the port in `js/dbhelper.js` line 11. 
+
+=== PHP server
+
+* First make sure you have php installed.
+** In the terminal, type `php-v` and you should see the version. 
+* Once you confirm that you have php installed, you can easily type this in terminal in the project's directory:
+** `php -S localhost:8000`
+

@@ -171,15 +171,15 @@ createRestaurantHTML = (restaurant) => {
 
   
   const text = document.createElement('a');
-  const picture = document.createElement('Picture');
+  const picture = document.createElement('picture');
 
   const webpimg = document.createElement('source');
   const imgt = document.createElement('source');
   const img = document.createElement('img');
 
-  webpimg.src = DBHelper.imageUrlWebP(restaurant);
+  webpimg.srcset = DBHelper.imageUrlWebP(restaurant);
   webpimg.type = 'image/webp';
-  imgt.src = DBHelper.imageUrlForRestaurant(restaurant);
+  imgt.srcset = DBHelper.imageUrlForRestaurant(restaurant);
   imgt.type = 'image/jpeg'
 
   img.alt = `Image of ${restaurant.name} in ${restaurant.neighborhood}`;
