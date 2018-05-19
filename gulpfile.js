@@ -33,7 +33,7 @@ gulp.task('imagemin', function(){
 
 
 gulp.task('min', function() {
-  gulp.src('css/*.scss')
+  gulp.src('style/*.scss')
     .pipe(sass({outputStyle: 'compressed'}))
     .pipe(minifyCSS())
     .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9'))

@@ -32,20 +32,20 @@
 
     <a class="toggle open" href="#navi-links">
 
-          <img src="img/logo.svg" alt="Logo"><h2 class="navi"> NAVIGATION</h2>
+          <img src="build/images/logo.svg" alt="Restaurant Review"><h2 class="navi"> NAVIGATION</h2>
 </a>
         
         <div id="navi-links">
-               <ul id="mainlinks">
-                 <span class="close"> <a href="#">X</a></span>
-                <li> <a href="/">Home</a></li>
-                <li> <a href="#restaurant-container">Information</a></li>
-                <li> <a href="#rest-hours">Hours</a></li>
-                <li> <a href="#map">Map</a></li></ul>
+               <ul aria-label="restaurant navigation" id="mainlinks">
+                 <span class="close"> <a href="#">close</a></span>
+                  <li> <a role="link" href="/">Home</a></li>
+                  <li> <a role="link" href="#restaurant-container">Information</a></li>
+                  <li> <a role="link" href="#rest-hours">Hours</a></li>
+                  <li> <a role="link" href="#map">Map</a></li></ul>
                 
               
                 <h3>Other Restaurants:</h3>
-             <ul id="breadcrumb" ></ul> 
+             <ul aria-label="list of other restaurants" id="breadcrumb" ></ul> 
         </div>
   </nav>
 
@@ -58,7 +58,7 @@
   <main id="maincontent">
     <!-- Beginning map -->
     <section id="map-container">
-      <div id="map"></div>
+      <div aria-label="Map of location" role="application" id="map"></div>
     </section>
     <!-- End map -->
     <!-- Beginning restaurant -->

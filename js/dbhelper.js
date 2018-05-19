@@ -34,7 +34,6 @@ class DBHelper {
     xhr.send();
   }
 
-
   /**
    * Fetch a restaurant by its ID.
    */

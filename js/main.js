@@ -78,9 +78,16 @@ window.initMap = () => {
   self.map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12,
     center: loc,
-    scrollwheel: false
+    scrollwheel: false,
+    onerror: mapFallback(),
   });
   updateRestaurants();
+}
+
+mapFallback = () => {
+  const mapF = document.getElementById("map")
+  mapF.innerHTML = "Sorry, the map application could not be loaded";
+  mapF.className = 'mapFallback'
 }
 
 /**

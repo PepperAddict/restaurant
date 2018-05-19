@@ -16,6 +16,7 @@
     });
   });
 }
+
 </script>
   <!-- <link rel="stylesheet" href="reststyle.css"> -->
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -27,7 +28,7 @@
 
   <header>
     <!-- header -->
-    <img src="img/logo.svg">
+    <img src="build/images/logo.svg" alt="Restaurant Review">
     <div class="box">
       <h1>Restaurant Reviews</h1></div>
     <a href="#restaurants-list" class="hidethis">Skip to filter results</a>
@@ -36,27 +37,27 @@
   <main id="maincontent">
     <!-- map -->
     <section id="map-container">
-      <div id="map"></div>
+      <div aria-label="Map of location with restaurants" role="application"  id="map"></div>
     </section>
 
     <nav>
     
       <section>
         <!-- filter options-->
-        <div tabindex="0" class="filter-options">
+        <div class="filter-options">
           <h2>Filter Results</h2>
   
           <hr width="50%">
   
           <div class="filter-container">
             <label>
-              <select tabindex="0" id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+              <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
                 <option aria-labelledby="neighborhoods-select" value="all">All Neighborhoods</option>
               </select>
             </label>
   
             <label>
-              <select tabindex="0" id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+              <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
                 <option aria-labelledby="cuisines-select" value="all">All Cuisines</option>
               </select>
             </label>
@@ -72,7 +73,7 @@
     <section class="restaurant-items">
       <article>
              <h2>Restaurants</h2>
-      <ul id="restaurants-list"></ul>
+      <ul aria-label="list of restaurants" id="restaurants-list"></ul>
       </article>
  
     </section>

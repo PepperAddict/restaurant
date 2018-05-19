@@ -1,2 +1,4 @@
-css/
+/style
+/img
 yarn.lock
+node_modules

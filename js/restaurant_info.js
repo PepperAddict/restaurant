@@ -13,12 +13,18 @@ window.initMap = () => {
         title: 'map',
         zoom: 16,
         center: restaurant.latlng,
-        scrollwheel: false
+        scrollwheel: false,
+        onerror: mapFallback(),
       });
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
     }
   });
+}
+mapFallback = () => {
+  const mapF = document.getElementById("map")
+  mapF.innerHTML = "Sorry, the map application could not be loaded";
+  mapF.className = 'mapFallback'
 }
 
 /**
