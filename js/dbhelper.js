@@ -8,7 +8,7 @@ class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
   static get ADDRESS() {
-    let address = `localhost:8000`;
+    let address = `https://pepperaddict.github.io/restaurant/`;
     return address;
   }
   static get DATABASE_URL() {
