@@ -12,7 +12,7 @@ class DBHelper {
     return address;
   }
   static get DATABASE_URL() {
-    return `http://${this.ADDRESS}/data/restaurants.json`;
+    return `https://${this.ADDRESS}/data/restaurants.json`;
   }
 
   /**
