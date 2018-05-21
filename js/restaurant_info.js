@@ -169,7 +169,7 @@ createReviewHTML = (review) => {
  */
 fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
-  const serverport = `http://${DBHelper.ADDRESS}/`;
+  const serverport = `https://${DBHelper.ADDRESS}/`;
   DBHelper.fetchRestaurants((error, restaurants) => {
     if (error) 
         console.log(error)
