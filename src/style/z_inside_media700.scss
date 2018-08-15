@@ -1,0 +1,27 @@
+
+  @media screen and (min-width: 700px) {
+
+    .inside #restaurant-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-items: start;
+        align-items: start;
+    }
+    .inside main {
+        display: grid;
+        grid-template-columns: 1fr;
+
+        align-items: start;
+    }
+    .inside .rest-detail{
+        display: grid;
+        grid-column-start: 2;
+        align-items: start;
+    }
+    .inside .rest-image {
+        padding: 0px;
+        display: grid;
+        grid-column-start: 1;
+    }
+
+}
