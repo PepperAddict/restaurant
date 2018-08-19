@@ -1,0 +1,34 @@
+#reviews-list {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background: var(--dark-gray);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  }
+  #reviews-list li {
+    background-color: var(--off-white);
+    display: block;
+    box-sizing: border-box;
+    list-style-type: none;
+    padding: 3%;
+    position: relative;
+    width: 100%;
+    border: 5px solid var(--dark-gray);
+    line-height: 1.2em;
+  }
+
+  #reviews-list .revComment {
+    border-top: 1px solid var(--mid-gray);
+    border-bottom: 1px solid var(--mid-gray);
+    line-height: 1.2em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  .inside #reviews-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-start: 1;
+    grid-column-end: -1;
+  }
+

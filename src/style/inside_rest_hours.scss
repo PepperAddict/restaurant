@@ -1,0 +1,13 @@
+#rest-hours {
+    width: 100%;
+  }
+  #rest-hours tr:nth-child(odd) {
+    background: white;
+  }
+  #rest-hours tr:nth-child(even) {
+    background: var(--yellow);
+  }
+  #rest-hours {
+    padding: 2%;
+    box-sizing: border-box;
+  }

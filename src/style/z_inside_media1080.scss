@@ -1,0 +1,160 @@
+
+@media screen and (min-width: 1080px) {
+    .inside main {
+      display: flex;
+      position: relative;
+      grid-template-columns: 1fr 2fr;
+      grid-template-rows: repeat(10, auto);
+      align-items: start;
+      box-sizing: border-box;
+    }
+    .inside #map-container {
+      display: grid;
+      grid-column-start: 2;
+      grid-row-start: 1 !important;
+      grid-row-end: -1;
+
+    }
+    .inside #map {
+      background-color: #ccc;
+      width: 100%;
+      height: 100vmin;
+      max-height: 500px;
+    }
+  .inside #restaurant-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: start;
+    align-items: start;
+    & .rest-detail{
+      display: grid;
+      grid-column-start: 1;
+      grid-column-end: -1;
+      align-items: start;
+    }
+    & .rest-image {
+      padding: 0px;
+      display: grid;
+      grid-column-start: 1;
+    }
+  }
+  
+  /************navigation*************/
+  
+
+
+  .inside header {
+    width: 100%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    font-family: var(--cursive);
+    font-size: 1.1rem;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .inside #rest-name {
+    font-family: var(--arya-font);
+    font-size: 2em;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.1;
+    text-align: center;
+    position: absolute;
+    z-index: 2;
+    background-color: white;
+    padding: .5em;
+  }
+  
+  /*******navi popup **************/
+  
+  .inside #navi-links {
+    transition: top .3s ease-in-out;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.9);
+    top: -900px;
+    min-height: 10px;
+    height: 350px;
+    width: 100%;
+    left: 0px;
+    z-index:3;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 50px 50px auto;
+    justify-items: start;
+    align-items: start;
+    margin: 0px;
+    box-sizing: border-box;
+    & h3 {
+      margin: 0px;
+      padding: 0px;
+      padding-left: 5%;
+      width: 100%;
+      background: var(--dark-gray);
+      color: var(--off-white);
+      box-sizing: border-box;
+      text-align: left;
+    }
+    & a {
+      color: var(--dark-gray);
+    }
+
+  }
+
+  #navi-links:target {
+    transform:none;
+    top: 59px;
+  }
+  
+  .inside #breadcrumb, .inside #mainlinks {
+    display: flex;
+    flex-wrap: wrap;
+    height: auto;
+    text-align: center;
+    width: 100%;
+    justify-items: start;
+    align-items: start;
+    margin: 0px;
+    box-sizing: border-box;
+  }
+
+  .inside #breadcrumb li, .inside #mainlinks li {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0px;
+  }
+  /* Add a color to all links inside the list */
+  #breadcrumb a, #breadcrumb li a, #breadcrumb li, .inside #mainlinks a, .inside #mainlinks li, .inside #mainlinks li a {
+      text-decoration: none;
+      width: auto;
+      margin: 0px;
+      padding: .5em;
+      box-sizing: border-box;
+      font-size: 1.3rem;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+  }
+  
+  
+  /* Add a color on mouse-over */
+  #breadcrumb li a:hover, #mainlinks li a:hover{
+      color: white;
+      background: var(--dark-gray);
+      text-decoration: none;
+  }
+  
+  .currentLink, .currentLink a {
+    background: var(--yellow);
+    color: var(--dark-gray);
+  }
+
+  .inside nav {
+    display: grid;
+    text-align: left;
+    height: auto;
+    box-sizing: border-box;
+  }
+
+  
+  }
