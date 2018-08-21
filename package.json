@@ -7,15 +7,19 @@
   "author": "Udacity & Pepper",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "build": "webpack --mode develop",
+    "watch": "npm run build -- --watch"
+  },
   "dependencies": {
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^5.0.0",
-    "gulp-browserify": "^0.5.1",
-    "gulp-concat": "^2.6.1",
-    "gulp-imagemin": "^4.1.0",
-    "gulp-minify-css": "^1.2.4",
-    "gulp-sass": "^4.0.1",
-    "imagemin-webp": "^4.1.0",
-    "watchify": "^3.11.0"
+    "global": "^4.3.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-es2017": "^6.24.1",
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
   }
 }
