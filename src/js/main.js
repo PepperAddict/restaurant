@@ -85,7 +85,7 @@ initMap = () => {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
       '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
       'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    id: 'mapbox.dark',
+    id: 'mapbox.light',
 
   }).addTo(newMap);
 
@@ -162,14 +162,19 @@ createRestaurantHTML = (restaurant) => {
   const text = document.createElement('a');
   const picture = document.createElement('picture');
 
-  const webpimg = document.createElement('source');
+  const webpimg = document.createElement('source');  
+  webpimg.srcset = DBHelper.imageUrlForRestaurant(restaurant) + '.webp';
+  webpimg.type = 'image/webp';
   const imgt = document.createElement('source');
+  imgt.srcset = DBHelper.imageUrlForRestaurant(restaurant) + '.jpg';
+  imgt.type = 'image/jpeg';
   const img = document.createElement('img');
+  
 
 
   img.alt = `Image of ${restaurant.name} in ${restaurant.neighborhood}`;
 
-  img.src = DBHelper.imageUrlForRestaurant(restaurant);
+  img.src = DBHelper.imageUrlForRestaurant(restaurant) + '.jpg';
 
   
 
