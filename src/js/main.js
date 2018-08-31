@@ -158,7 +158,6 @@ createRestaurantHTML = (restaurant) => {
   name.className = 'fp-r-name';
   name.innerHTML = restaurant.name;
   li.append(name);
-
   
   const text = document.createElement('a');
   const picture = document.createElement('picture');
@@ -167,8 +166,12 @@ createRestaurantHTML = (restaurant) => {
   const imgt = document.createElement('source');
   const img = document.createElement('img');
 
+
   img.alt = `Image of ${restaurant.name} in ${restaurant.neighborhood}`;
+
   img.src = DBHelper.imageUrlForRestaurant(restaurant);
+
+  
 
   picture.appendChild(webpimg);
   picture.appendChild(imgt)

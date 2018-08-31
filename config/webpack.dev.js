@@ -2,17 +2,50 @@ var path = require('path');
 
 module.exports = {
     entry: {
-        main: ["./src/js/dbhelper.js"]
+        main: ["./src/js/index.js"]
     },
     mode: "development",
     output: {
-        path: path.resolve(__dirname, '../build/js/'),
         filename: '[name]-bundle.js',
-        publicPath: "/"
+        path: path.resolve(__dirname, '../build/js/'),
+        publicPath: "../build"
     },
     devServer: {
-        contentBase: "./"
+        contentBase: "./",
+        overlay: true,
     },
 
+    module: {
+        rules: [{
+                test: /\.css$/,
+                use: [{
+                        loader: "style-loader"
+                    },
+                    {
+                        loader: "css-loader"
+                    }
+
+                ]
+            },
+            {
+                test: /\.html$/,
+                use: [
+                    {
+                        loader: "file-loader",
+                        options: {
+                            name: "[name].html"
+                        },
+                        
+                    },
+                    {
+                        loader: "extract-loader"
+                    },
+                    {
+                        loader: "html-loader"
+                    }
+                ]
+            }
+        ]
+    }
 
 }
