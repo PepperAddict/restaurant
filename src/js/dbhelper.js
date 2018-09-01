@@ -156,7 +156,6 @@ class DBHelper {
     let id = restaurant.id;
     let together = Object.is(photograph, undefined) ? id : photograph;
     return `build/images/${together}`;
-  
   }
 
   /**
