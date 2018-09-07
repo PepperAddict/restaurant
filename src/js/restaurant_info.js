@@ -49,6 +49,7 @@ mapFallback = () => {
  * Create restaurant HTML and add it to the webpage
  */
 fillRestaurantHTML = (restaurant = self.restaurant) => {
+  document.title = restaurant.name + '\'s information';
   const name = document.getElementById('rest-name');
   name.innerHTML = restaurant.name;
 
@@ -102,7 +103,6 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
     hours.appendChild(row);
   }
 }
-
 
 
 /**
