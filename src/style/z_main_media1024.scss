@@ -25,7 +25,6 @@
         visibility: visible;
         display: grid;
         grid-row-start: 2;
-        height: 600px;
 
       }
       & main {
@@ -68,6 +67,7 @@
         color: white;
         padding-top: 0px;
         margin-top: 0px;
+      
       }
     
       #restaurants-list {
@@ -94,10 +94,9 @@
         text-align: left;
         width: 100%;
         text-decoration: none;
-        padding-bottom: 1em;
         margin-top: 0px;
         vertical-align: top;
-        height: 30px;
+        height: auto;
       }
       
       .restaurants-img {

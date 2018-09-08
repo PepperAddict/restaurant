@@ -3,6 +3,7 @@
  */
 
 class DBHelper {
+
   static get ADDRESS() {
     let address = `localhost:8080`;
     return address;
@@ -26,7 +27,7 @@ class DBHelper {
           return response.json();
       })
       .then((data) => {  
-        const restaurants = data;
+        const restaurants = data.slice(0, 10);
         callback(null, restaurants);
       })
       .catch((err) => {
@@ -152,7 +153,10 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return (`src/img/${restaurant.photograph}.jpg`);
+    let photograph = restaurant.photograph;
+    let id = restaurant.id;
+    let together = Object.is(photograph, undefined) ? id : photograph;
+    return `build/images/${together}`;
   }
 
   /**
