@@ -3,6 +3,7 @@
  */
 
 class DBHelper {
+
   static get ADDRESS() {
     let address = `localhost:8080`;
     return address;

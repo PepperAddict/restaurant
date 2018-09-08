@@ -10,10 +10,12 @@ let apikey = 'pk.eyJ1IjoicGVwcGVyYWRkaWN0IiwiYSI6ImNqa3Y4YmtwdTBvazAza3BhZ20zYnE
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
-  initMap(); // added 
+  initMap();
   fetchNeighborhoods();
   fetchCuisines();
+
 });
+
 
 /**
  * Fetch all neighborhoods and set their HTML.
@@ -143,11 +145,11 @@ resetRestaurants = (restaurants) => {
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById('restaurants-list');
   if (restaurants.length == 0 ) {
-    console.log('empty')
-    const hi = document.createElement('li');
-    hi.innerHTML = 'Sorry! There are no restaurants to display. Try a different option.'
+    const li = document.createElement('li');
+    li.className = 'noshow'
+    li.innerHTML = 'Sorry! There\'s nothing here. Try a different option.'
 
-    ul.append(hi)
+    ul.append(li)
   }
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));

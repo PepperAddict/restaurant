@@ -22,46 +22,31 @@ const paths = {
         dest: './build/js'
     }
 }
+gulp.task('babel', () => {
+
+    return gulp.src('./src/js/*.js')
+      .pipe(sourcemaps.init())
+      .pipe(babel({
+          presets: ["env"]
+      }))
+    //   .pipe(concat("combined-index.js"))
+      .pipe(sourcemaps.write('.'))
+      .pipe(gulp.dest('./build/js'));
+})
 
 gulp.task('watch', ['min'], function() {
     browserSync.init({
-        server: "."
+        server: ".",
     });
     gulp.watch("./src/style/*.scss", ['min']).on('change', browserSync.reload);
     gulp.watch("./index.html").on('change', browserSync.reload);
+    gulp.watch('./src/js/*.js', ['babel']).on('change', browserSync.reload);
+    gulp.watch('sw.js').on('change', browserSync.reload)
 })
 
-gulp.task('default', ['build']);
-
-gulp.task('build', ['scripts', 'min']);
-
-gulp.task('scripts', function() {
-    return gulp.src(paths.script.src + '/*.js')
-    .pipe(sourcemaps.init())
-    .pipe(babel())
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest(paths.script.dest))
-})
-
-gulp.task("babel", function () {
-    const $in = paths.script.src + '/*.js';
-    const $out = paths.script.dest + '/*.js';
-    console.log($in + $out)
-    return gulp.src($in)
-      .pipe(sourcemaps.init())
-      .pipe(babel({
-          minified: true,
-          comments: false,
-          presets: ["latest"]
-      }))
-    //   .pipe(concat("all.js"))
-      .pipe(sourcemaps.write('.'))
-      .pipe(gulp.dest($out));
-      
-  })
 
 gulp.task('images', function() {
-    imagemin(['img/*.{jpg,png}'], 'build/images', {
+    imagemin(['./src/img/*.{jpg,png}'], 'build/images', {
         use: [
             imageminWebp({quality: 50})
         ]
@@ -72,14 +57,14 @@ gulp.task('images', function() {
 })
 
 gulp.task('imagemin', function(){
-    return gulp.src('img/*.+(png|jpg|gif|svg)')
+    return gulp.src('.src/img/*.+(png|jpg|gif|svg)')
     .pipe(gimagemin(
         {
             optimizationLevel: 5,
             progressive: true,
         }
     ))
-    .pipe(gulp.dest('build/images'))
+    .pipe(gulp.dest('./build/images'))
   });
   gulp.task('min', function() {
     gulp.src(paths.styles.src + '/*.scss')
