@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap();
   fetchNeighborhoods();
   fetchCuisines();
-
 });
 
 

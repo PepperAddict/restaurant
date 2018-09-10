@@ -25,53 +25,54 @@ const paths = {
 gulp.task('babel', () => {
 
     return gulp.src('./src/js/*.js')
-      .pipe(sourcemaps.init())
-      .pipe(babel({
-          presets: ["env"]
-      }))
-    //   .pipe(concat("combined-index.js"))
-      .pipe(sourcemaps.write('.'))
-      .pipe(gulp.dest('./build/js'));
+        .pipe(sourcemaps.init())
+        .pipe(babel({
+            presets: ["env"]
+        }))
+        //   .pipe(concat("combined-index.js"))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('./build/js'));
 })
 
-gulp.task('watch', ['min'], function() {
+gulp.task('watch', ['min'], function () {
     browserSync.init({
         server: ".",
     });
     gulp.watch("./src/style/*.scss", ['min']).on('change', browserSync.reload);
-    gulp.watch("./index.html").on('change', browserSync.reload);
+    gulp.watch(["./index.html", "./restaurant.html"]).on('change', browserSync.reload);
     gulp.watch('./src/js/*.js', ['babel']).on('change', browserSync.reload);
     gulp.watch('sw.js').on('change', browserSync.reload)
 })
 
+gulp.task('min', function () {
+    gulp.src(paths.styles.src + '/*.scss')
+        .pipe(sass({
+            outputStyle: 'compressed'
+        }))
+        .pipe(minifyCSS())
+        .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9'))
+        .pipe(concat('style.min.css'))
+        .pipe(gulp.dest('./build/css'))
+})
 
-gulp.task('images', function() {
+gulp.task('images', function () {
     imagemin(['./src/img/*.{jpg,png}'], 'build/images', {
         use: [
-            imageminWebp({quality: 50})
+            imageminWebp({
+                quality: 50
+            })
         ]
     }).then(() => {
         console.log('Images optimized');
     });
-    
+
 })
 
-gulp.task('imagemin', function(){
+gulp.task('imagemin', function () {
     return gulp.src('.src/img/*.+(png|jpg|gif|svg)')
-    .pipe(gimagemin(
-        {
+        .pipe(gimagemin({
             optimizationLevel: 5,
             progressive: true,
-        }
-    ))
-    .pipe(gulp.dest('./build/images'))
-  });
-  gulp.task('min', function() {
-    gulp.src(paths.styles.src + '/*.scss')
-      .pipe(sass({outputStyle: 'compressed'}))
-      .pipe(minifyCSS())
-      .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9'))
-      .pipe(concat('style.min.css'))
-      .pipe(gulp.dest('build/css'))  
-  })
-
+        }))
+        .pipe(gulp.dest('./build/images'))
+});

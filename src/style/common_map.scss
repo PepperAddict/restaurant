@@ -1,7 +1,10 @@
 .container #map {
-  height: 500px;
+  height: 100% !important;
   background-color: #ccc;
   position: relative;
+  @media (max-width: 1023px) {
+    height: 500px !important;
+  }
   & #map-container {
     border-top: 5px solid var(--pink);
     border-bottom: 5px solid var(--pink);
@@ -9,16 +12,7 @@
     box-sizing: border-box;
     display: none;
     visibility: hidden;
-  }
-}
-
-.inside #map-container {
-  display: grid;
-  grid-row-start: 3;
-  & #map {
-    background-color: #ccc;
-    height: 200px;
-    width: 100%;
+    z-index: 1;
   }
 }
 

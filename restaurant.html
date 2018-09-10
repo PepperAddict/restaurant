@@ -2,98 +2,79 @@
 <html lang="en">
 
 <head>
- <!-- Main CSS file -->
+  <!-- Main CSS file -->
   <link rel="stylesheet" href="build/css/style.min.css">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+    crossorigin="" />
 
 
-  <!-- <script>
+  <script>
     if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register('sw.js').then(function(registration) {
-        // Registration was successful
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      }, function(err) {
-        // registration failed :(
-        console.log('ServiceWorker registration failed: ', err);
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').then(function (registration) {
+          // Registration was successful
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function (err) {
+          // registration failed :(
+          console.log('ServiceWorker registration failed: ', err);
+        });
       });
-    });
-  }
-  </script> -->
-  
+    }
+  </script>
+
 </head>
 
 <body class="inside">
-
-
   <nav>
-
     <a class="toggle open" href="#navi-links">
 
-          <img src="build/images/logo.svg" alt="Restaurant Review"><h2 class="navi"> NAVIGATION</h2>
-</a>
-        
-        <div id="navi-links">
-               <ul aria-label="restaurant navigation" id="mainlinks">
-                 <span class="close"> <a href="#">close</a></span>
-                  <li> <a role="link" href="/">Home</a></li>
-                  <li> <a role="link" href="#restaurant-container">Information</a></li>
-                  <li> <a role="link" href="#rest-hours">Hours</a></li>
-                  <li> <a role="link" href="#map">Map</a></li></ul>
-                
-              
-                <h3>Other Restaurants:</h3>
-             <ul aria-label="list of other restaurants" id="breadcrumb" ></ul> 
-        </div>
+      <img src="build/images/logo.svg" alt="Restaurant Review">
+      <h2 class="navi"> NAVIGATION</h2>
+    </a>
+    <div id="navi-links">
+      <ul aria-label="restaurant navigation" id="mainlinks">
+        <span class="close"> <a href="#">close</a></span>
+        <li> <a role="link" href="/">Home</a></li>
+        <li> <a role="link" href="#restaurant-container">Information</a></li>
+        <li> <a role="link" href="#rest-hours">Hours</a></li>
+        <li> <a role="link" href="#map">Map</a></li>
+      </ul>
+      <h3>Other Restaurants:</h3>
+      <ul aria-label="list of other restaurants" id="breadcrumb"></ul>
+    </div>
   </nav>
 
   <header>
-        <h1 id="rest-name"></h1>
+    <h1 id="rest-name"></h1>
   </header>
-  <!-- End header -->
-
-  <!-- Beginning main -->
   <main id="maincontent">
-    <!-- Beginning map -->
-    <!-- End map -->
-    <!-- Beginning restaurant -->
     <section id="restaurant-container">
-      <div><picture id="rest-img"></picture></div>
-
+      <div>
+        <picture id="rest-img"></picture>
+      </div>
       <div aria-label="Map of location" role="application" id="map"></div>
-
-
-      <div class="rest-detail"> 
-              <p id="rest-cuisine"></p>
-      <p id="rest-address"></p>
-      <h2>Hours</h2>
-      <table id="rest-hours"></table>
+      <div class="rest-detail">
+        <p id="rest-cuisine"></p>
+        <p id="rest-address"></p>
+        <h2>Hours</h2>
+        <table id="rest-hours"></table>
       </div>
 
     </section>
-    <!-- end restaurant -->
-    <!-- Beginning reviews -->
     <section id="reviews-container">
       <h2>Reviews</h2>
       <ul id="reviews-list"></ul>
     </section>
-    <!-- End reviews -->
   </main>
-  <!-- End main -->
-
-  <!-- Beginning footer -->
   <footer id="footer">
     Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
   </footer>
-  <!-- End footer -->
-  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
-  <!-- Beginning scripts -->
-  <!-- Database helpers -->
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+    crossorigin=""></script>
   <script type="text/javascript" src="src/js/dbhelper.js"></script>
-  <!-- Main javascript file -->
   <script type="text/javascript" src="src/js/restaurant_info.js"></script>
-  
+
 </body>
 
 </html>

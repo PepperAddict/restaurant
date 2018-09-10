@@ -5,7 +5,7 @@
 class DBHelper {
 
   static get ADDRESS() {
-    let address = `localhost:8080`;
+    let address = `localhost:3000`;
     return address;
   }
   /**
@@ -14,7 +14,7 @@ class DBHelper {
    */
   static get DATABASE_URL() {
     const port = 8000 // Change this to your server port
-    return `http://${this.ADDRESS}/src/data/restaurants.json`;
+    return `http://localhost:1337/restaurants/`;
   }
 
   /**
@@ -34,6 +34,7 @@ class DBHelper {
           console.log(err);
         });
   }
+  
   /**
    * Fetch a restaurant by its ID.
    */

@@ -31,6 +31,7 @@ var DBHelper = function () {
         console.log(err);
       });
     }
+
     /**
      * Fetch a restaurant by its ID.
      */
