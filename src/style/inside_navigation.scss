@@ -1,63 +1,103 @@
-.inside nav h3 {
+.inside nav {
+  z-index: 5;
+
+  h3 {
     padding-left: 3%;
   }
-.inside .navi{
-    z-index: 3;
+
+  img {
+    width: 80px;
+    position: absolute;
+    z-index: 4;
+    margin-top: -10px;
+    left: 0;
+  }
+}
+
+.inside .navi {
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  box-sizing: border-box;
+  padding-left: 65px;
+}
+
+.inside header {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  font-family: var(--cursive);
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.inside #rest-name {
+  font-family: var(--arya-font);
+  font-size: 2em;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.inside #navi-links {
+  transition: left .3s ease-in-out;
+  position: absolute;
+  background: white;
+  top: 0;
+  bottom: 0;
+  min-height: 100vmax;
+  /* override Safari bug */
+  width: 100%;
+  left: -1599px;
+  z-index: 3;
+  box-sizing: border-box;
+  &:target {
+    left: 0px;
+  }
+
+  @media (min-width: 700px) {
+    transition: top .3s ease-in-out;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.9);
+    top: -900px;
+    min-height: 10px;
+    height: 350px;
     width: 100%;
-    height: 100%;
+    left: 0px;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 50px 50px auto;
+    justify-items: start;
+    align-items: start;
     margin: 0px;
     box-sizing: border-box;
-    padding-left: 65px;
-  }
-  
 
+    & h3 {
+      margin: 0px;
+      padding: 0px;
+      padding-left: 5%;
+      width: 100%;
+      background: var(--dark-gray);
+      color: var(--off-white);
+      box-sizing: border-box;
+      text-align: left;
+    }
 
-  .inside header {
-    width: 100%;
-    display: grid;
-    justify-items: center;
-    align-items: center;
-    font-family: var(--cursive);
-    font-size: 1.1rem;
-    text-align: center;
-  }
-  .inside #rest-name {
-    font-family: var(--arya-font);
-    font-size: 2em;
-    font-weight: 800;
-    letter-spacing: 0;
-    line-height: 1.1;
-    text-align: center;
-  }
-  
-  
-  
-  .inside nav img {
-  width: 80px;
-  position: absolute;
-  z-index: 4;
-  margin-top: -10px;
-  left: 0;
-  
-  }
-  
-  
-  
-  .inside #navi-links {
-    transition: left .3s ease-in-out;
-    position: absolute;
-    background: white;
-    top: 0;
-    bottom: 0;   
-    min-height: 100vh; /* override Safari bug */
-    width: 100%;
-    left: -1599px;
-    z-index:3;
-    box-sizing: border-box;
+    & a {
+      color: var(--dark-gray);
+    }
 
+    &:target {
+      transform: none;
+      top: 59px;
+    }
   }
 
-  #mainlinks .close {
+  .close {
     position: absolute;
     right: 40px;
     top: 0px;
@@ -69,52 +109,57 @@
     font-family: Arial, Helvetica, sans-serif;
     box-sizing: border-box;
     z-index: 2;
+
     & a {
-        color: black;
+      color: black;
     }
-    
+
     & a:hover {
-        background: white;
-        color: red;
+      background: white;
+      color: red;
     }
   }
-
-  #navi-links:target {
-    left: 0px;
-  }
-  
-  
-  #mainlinks, #breadcrumb {
-    box-sizing: border-box;
-  }
+}
 
 
-  /* Add a color to all links inside the list */
-  #breadcrumb a, #breadcrumb li a, #breadcrumb li, .inside #mainlinks a, .inside #mainlinks li, .inside #mainlinks li a {
-      text-decoration: none;
-      display: block;
-      width: 100%;
-      margin: 0px;
-      padding: .5em;
-      box-sizing: border-box;
-      font-size: 1.3rem;
-      list-style: none;
-  }
-  
-  
-  /* Add a color on mouse-over */
-  #breadcrumb li a:hover, #mainlinks li a:hover{
-      color: white;
-      background: var(--dark-gray);
-      text-decoration: none;
-  }
-  
-  .currentLink, .currentLink a {
-    background: var(--yellow);
-    color: var(--dark-gray);
-  }
+#mainlinks, #breadcrumb {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  background: white;
+}
 
-  .container nav {
-    display: grid;
-    text-align: center;
-  }
+/* Add a color to all links inside the list */
+#breadcrumb a,
+#breadcrumb li a,
+#breadcrumb li,
+.inside #mainlinks a,
+.inside #mainlinks li,
+.inside #mainlinks li a {
+  text-decoration: none;
+  display: block;
+  margin: 0px;
+  padding: .5em;
+  box-sizing: border-box;
+  font-size: 1.3rem;
+  list-style: none;
+}
+
+/* Add a color on mouse-over */
+#breadcrumb li a:hover,
+#mainlinks li a:hover {
+  color: white;
+  background: var(--dark-gray);
+  text-decoration: none;
+}
+
+.currentLink,
+.currentLink a {
+  background: var(--yellow);
+  color: var(--dark-gray);
+}
+
+.container nav {
+  display: grid;
+  text-align: center;
+}

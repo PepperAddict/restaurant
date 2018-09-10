@@ -110,7 +110,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
-  const serverport = `https://${DBHelper.ADDRESS}/`;
+  const serverport = `http://${DBHelper.ADDRESS}/`;
   DBHelper.fetchRestaurants((error, restaurants) => {
     if (error) 
         console.log(error)
