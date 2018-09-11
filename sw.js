@@ -1,4 +1,4 @@
-let CACHE_NAME = 'RRC-v1.4'
+let CACHE_NAME = 'RRC-v1.1'
 let staticCacheName
 let toCache = [
     'offline.html',
@@ -14,7 +14,6 @@ self.addEventListener('install', (event) => {
         caches.open(CACHE_NAME)
         .then((cache) => {
             return cache.addAll(toCache)
-
         })
         .catch(err => {
             console.log('no worky' + err)
@@ -29,9 +28,6 @@ self.addEventListener('fetch', (event) => {
             let fetchRequest = event.request.clone()
             return (response || fetch(fetchRequest)
                 .then(networkResponse => {
-                    if (networkResponse.status > 200) {
-                        return caches.match('offline.html')
-                    }
                     let network = networkResponse.clone()
                     let eventCall = event.request
                     
@@ -54,6 +50,7 @@ self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             for (let name of cacheNames)
+                console.log(name)
                 caches.delete(name)
         })
     )

@@ -3,6 +3,18 @@
 
   h3 {
     padding-left: 3%;
+      background: var(--dark-gray);
+      color: var(--off-white);
+    @media (min-width: 700px) {
+      margin: 0px;
+      padding-left: 5%;
+      width: 100%;
+
+      
+      box-sizing: border-box;
+      text-align: left;
+
+    }
   }
 
   img {
@@ -54,6 +66,7 @@
   left: -1599px;
   z-index: 3;
   box-sizing: border-box;
+
   &:target {
     left: 0px;
   }
@@ -75,17 +88,6 @@
     align-items: start;
     margin: 0px;
     box-sizing: border-box;
-
-    & h3 {
-      margin: 0px;
-      padding: 0px;
-      padding-left: 5%;
-      width: 100%;
-      background: var(--dark-gray);
-      color: var(--off-white);
-      box-sizing: border-box;
-      text-align: left;
-    }
 
     & a {
       color: var(--dark-gray);
@@ -121,12 +123,35 @@
   }
 }
 
+@media (min-width: 700px) {
 
-#mainlinks, #breadcrumb {
+  .inside #breadcrumb li,
+  .inside #mainlinks li {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0px;
+  }
+}
+
+#mainlinks,
+#breadcrumb {
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   background: white;
+
+  @media (min-width: 700px) {
+    height: auto;
+    text-align: center;
+    width: 100%;
+    justify-items: start;
+    align-items: start;
+    margin: 0px;
+    box-sizing: border-box;
+  }
+}
+#breadcrumb li {
+  width: 50%;
 }
 
 /* Add a color to all links inside the list */
@@ -143,6 +168,12 @@
   box-sizing: border-box;
   font-size: 1.3rem;
   list-style: none;
+
+  @media (min-width: 700px) {
+    width: auto;
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 
 /* Add a color on mouse-over */
@@ -151,6 +182,7 @@
   color: white;
   background: var(--dark-gray);
   text-decoration: none;
+
 }
 
 .currentLink,
@@ -162,4 +194,10 @@
 .container nav {
   display: grid;
   text-align: center;
+
+  @media (min-width: 700px) {
+    text-align: left;
+    height: auto;
+    box-sizing: border-box;
+  }
 }

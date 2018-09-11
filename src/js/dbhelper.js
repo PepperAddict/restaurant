@@ -5,7 +5,7 @@
 class DBHelper {
 
   static get ADDRESS() {
-    let address = `localhost:3000`;
+    let address = `localhost:8000`;
     return address;
   }
   /**
@@ -16,25 +16,63 @@ class DBHelper {
     const port = 8000 // Change this to your server port
     return `http://localhost:1337/restaurants/`;
   }
-
   /**
    * Fetch all restaurants.
    */
+
   static fetchRestaurants(callback) {
+    let dbPromise = idb.open('Restaurant-Database', 1, (upgradeDB) => {
+      const keyValStore = upgradeDB.createObjectStore('details', {
+        keyPath: 'id'
+      });
+      keyValStore.createIndex('by-name', 'name');
+      keyValStore.createIndex('by-neighborhood', 'neighborhood');
+      keyValStore.createIndex('by-photograph', 'photograph');
+      keyValStore.createIndex('by-address', 'address');
+    })
+
+    if (!IDBObjectStore) {
       let url = 'http://localhost:1337/restaurants/'
       fetch(url)
-      .then((response) => {
+        .then((response) => {
           return response.json();
-      })
-      .then((data) => {  
-        const restaurants = data.slice(0, 10);
-        callback(null, restaurants);
-      })
-      .catch((err) => {
+        })
+        .then((data) => {
+          const restaurants = data.slice(0, 10);
+          callback(null, restaurants);
+        })
+        .catch((err) => {
           console.log(err);
         });
+    } else {
+      console.log('fetched restaurants from IDB')
+      dbPromise.then((db) => {
+        fetch(DBHelper.DATABASE_URL)
+          .then((response) => {
+            return response.json();
+          }).then((data) => {
+            let datas = data
+            datas.forEach((message) => {
+              const tx = db.transaction('details', 'readwrite');
+              const keyValStore = tx.objectStore('details');
+              return keyValStore.put(message)
+            })
+          })
+
+          .catch((err) => console.log(err))
+
+      })
+
+      dbPromise.then((db) => {
+        let index = db.transaction('details').objectStore('details').index('by-name');
+        return index.getAll().then((messages) => {
+          callback(null, messages)
+        })
+      })
+    }
+
   }
-  
+
   /**
    * Fetch a restaurant by its ID.
    */
@@ -163,26 +201,26 @@ class DBHelper {
   /**
    * Map marker for a restaurant.
    */
-   static mapMarkerForMain(restaurant, map) {
+  static mapMarkerForMain(restaurant, map) {
     // https://leafletjs.com/reference-1.3.0.html#marker  
-    const marker = new L.marker([restaurant.latlng.lat, restaurant.latlng.lng],
-      {title: restaurant.name,
+    const marker = new L.marker([restaurant.latlng.lat, restaurant.latlng.lng], {
+      title: restaurant.name,
       alt: restaurant.name,
       url: DBHelper.urlForRestaurant(restaurant)
-      })
-      marker.addTo(newMap);
+    })
+    marker.addTo(newMap);
     return marker;
-  } 
+  }
 
-   static mapMarkerForRestaurant(restaurant, map) {
+  static mapMarkerForRestaurant(restaurant, map) {
     // https://leafletjs.com/reference-1.3.0.html#marker  
-    const marker = new L.marker([restaurant.latlng.lat, restaurant.latlng.lng],
-      {title: restaurant.name,
+    const marker = new L.marker([restaurant.latlng.lat, restaurant.latlng.lng], {
+      title: restaurant.name,
       alt: restaurant.name,
       url: DBHelper.urlForRestaurant(restaurant)
-      })
-      marker.addTo(restMap);
+    })
+    marker.addTo(restMap);
     return marker;
-  } 
+  }
 
 }
