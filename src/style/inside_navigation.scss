@@ -3,14 +3,13 @@
 
   h3 {
     padding-left: 3%;
-      background: var(--dark-gray);
-      color: var(--off-white);
+    background: var(--dark-gray);
+    color: var(--off-white);
+
     @media (min-width: 700px) {
       margin: 0px;
       padding-left: 5%;
       width: 100%;
-
-      
       box-sizing: border-box;
       text-align: left;
 
@@ -20,9 +19,20 @@
   img {
     width: 80px;
     position: absolute;
-    z-index: 4;
     margin-top: -10px;
     left: 0;
+    z-index: 4;
+    @media (max-width: 700px) {
+      position: fixed;
+      background: white;
+      border-radius: 0px 50% 50%;
+      padding: 5px 25px;
+      opacity: .5;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 }
 
@@ -56,7 +66,7 @@
 
 .inside #navi-links {
   transition: left .3s ease-in-out;
-  position: absolute;
+  position: fixed;
   background: white;
   top: 0;
   bottom: 0;
@@ -74,7 +84,6 @@
   @media (min-width: 700px) {
     transition: top .3s ease-in-out;
     position: absolute;
-    background: rgba(255, 255, 255, 0.9);
     top: -900px;
     min-height: 10px;
     height: 350px;
@@ -101,44 +110,43 @@
 
   .close {
     position: absolute;
-    right: 40px;
+    right: 60px;
     top: 0px;
     width: 30px;
-    background: none;
+    background: var(--dark-gray);
+    color: white;
     padding: 3px;
     text-align: right;
-    font-size: 3.5em;
+    font-size: 2em;
     font-family: Arial, Helvetica, sans-serif;
     box-sizing: border-box;
     z-index: 2;
+    padding: 25px 10px;
+    border-radius: 50px;
+    width: auto;
 
     & a {
-      color: black;
+      color: white;
     }
 
-    & a:hover {
+    &:hover {
       background: white;
       color: red;
+      a {
+        color: black;
+      }
     }
   }
 }
 
-@media (min-width: 700px) {
 
-  .inside #breadcrumb li,
-  .inside #mainlinks li {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0px;
-  }
-}
 
-#mainlinks,
 #breadcrumb {
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   background: white;
+
 
   @media (min-width: 700px) {
     height: auto;
@@ -148,8 +156,16 @@
     align-items: start;
     margin: 0px;
     box-sizing: border-box;
+
+    & li {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0px;
+    }
   }
+
 }
+
 #breadcrumb li {
   width: 50%;
 }
@@ -157,10 +173,7 @@
 /* Add a color to all links inside the list */
 #breadcrumb a,
 #breadcrumb li a,
-#breadcrumb li,
-.inside #mainlinks a,
-.inside #mainlinks li,
-.inside #mainlinks li a {
+#breadcrumb li {
   text-decoration: none;
   display: block;
   margin: 0px;
@@ -177,6 +190,19 @@
 }
 
 /* Add a color on mouse-over */
+#mainlinks {
+  margin-top: 130px;
+  display: flex;
+  @media (min-width: 700px) {
+    margin-top: auto;
+  }
+  li {
+    list-style:none;
+    margin-right: 10%;
+    font-size: 1.2em;
+  }
+}
+
 #breadcrumb li a:hover,
 #mainlinks li a:hover {
   color: white;

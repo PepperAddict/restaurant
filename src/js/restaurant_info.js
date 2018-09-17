@@ -110,7 +110,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
-  const serverport = `http://${DBHelper.ADDRESS}/`;
+  const serverport = window.location.origin;
   DBHelper.fetchRestaurants((error, restaurants) => {
     if (error) 
         console.log(error)
@@ -121,13 +121,14 @@ fillBreadcrumb = (restaurant=self.restaurant) => {
           const li = document.createElement('li');
           const a = document.createElement('a');
           a.innerHTML = `${value.name}`;
-          a.href = serverport + 'restaurant.html?id=' + value.id;
+          a.href = serverport + '/restaurant.html?id=' + value.id;
           a.target ="_self";
           li.appendChild(a);
           breadcrumb.appendChild(li);
 
         });
-        var uri = `${serverport}restaurant.html?id=${restaurant.id}`;
+        var uri = `${serverport}/restaurant.html?id=${restaurant.id}`;
+        console.log(serverport)
         var query = document.querySelectorAll('#navi-links a[href="'+uri+'"]');
         for (let i of query) {
           if (i == uri) {
