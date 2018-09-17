@@ -5,7 +5,7 @@
 class DBHelper {
 
   static get ADDRESS() {
-    let address = `localhost:8000`;
+    let address = window.location.protocol
     return address;
   }
   /**
@@ -21,6 +21,7 @@ class DBHelper {
    */
 
   static fetchRestaurants(callback) {
+    
     let dbPromise = idb.open('Restaurant-Database', 1, (upgradeDB) => {
       const keyValStore = upgradeDB.createObjectStore('details', {
         keyPath: 'id'
