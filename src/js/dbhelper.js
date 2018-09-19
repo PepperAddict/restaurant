@@ -21,16 +21,7 @@ class DBHelper {
    */
 
   static fetchRestaurants(callback) {
-    
-    let dbPromise = idb.open('Restaurant-Database', 1, (upgradeDB) => {
-      const keyValStore = upgradeDB.createObjectStore('details', {
-        keyPath: 'id'
-      });
-      keyValStore.createIndex('by-name', 'name');
-      keyValStore.createIndex('by-neighborhood', 'neighborhood');
-      keyValStore.createIndex('by-photograph', 'photograph');
-      keyValStore.createIndex('by-address', 'address');
-    })
+  
 
     if (!IDBObjectStore) {
       let url = 'http://localhost:1337/restaurants/'

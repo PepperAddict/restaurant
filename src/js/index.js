@@ -1,4 +1,3 @@
-
 let restaurants,
   neighborhoods,
   cuisines
@@ -76,10 +75,10 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
  */
 initMap = () => {
   self.newMap = L.map('map', {
-        center: [40.722216, -73.987501],
-        zoom: 12,
-        scrollWheelZoom: false
-      });
+    center: [40.722216, -73.987501],
+    zoom: 12,
+    scrollWheelZoom: false
+  });
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
     mapboxToken: apikey,
     maxZoom: 18,
@@ -143,7 +142,7 @@ resetRestaurants = (restaurants) => {
  */
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById('restaurants-list');
-  if (restaurants.length == 0 ) {
+  if (restaurants.length == 0) {
     const li = document.createElement('li');
     li.className = 'noshow'
     li.innerHTML = 'Sorry! There\'s nothing here. Try a different option.'
@@ -156,6 +155,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
   addMarkersToMap();
 }
 
+
 /**
  * Create restaurant HTML.
  */
@@ -163,54 +163,70 @@ createRestaurantHTML = (restaurant) => {
 
   const li = document.createElement('li');
 
+  //name
+  const div = document.createElement('div');
+  div.className = 'rest-head';
   const name = document.createElement('h3');
   name.className = 'fp-r-name';
   name.innerHTML = restaurant.name;
-  li.append(name);
-  
+  div.append(name);
+
+  //favicon2
+  const favTwo = document.createElement('div');
+  const fav = document.createElement('INPUT');
+  fav.type = 'checkbox'
+  fav.className = 'favorite'
+  fav.addEventListener('click', () => {
+    favoriteHandle();
+  })
+  favTwo.append(fav)
+  favTwo.className = 'favIcon';
+  div.append(favTwo);
+
+  li.append(div);
+
+
+
+
+
+  //picture
   const text = document.createElement('a');
   const picture = document.createElement('picture');
-
-  const webpimg = document.createElement('source');  
+  const webpimg = document.createElement('source');
   webpimg.srcset = DBHelper.imageUrlForRestaurant(restaurant) + '.webp';
   webpimg.type = 'image/webp';
   const imgt = document.createElement('source');
   imgt.srcset = DBHelper.imageUrlForRestaurant(restaurant) + '.jpg';
   imgt.type = 'image/jpeg';
   const img = document.createElement('img');
-  
-
-
   img.alt = `Image of ${restaurant.name} in ${restaurant.neighborhood}`;
-
   img.src = DBHelper.imageUrlForRestaurant(restaurant) + '.jpg';
-
-  
-
   picture.appendChild(webpimg);
   picture.appendChild(imgt)
   picture.appendChild(img)
-
   picture.className = 'restaurant-img';
-
   text.href = DBHelper.urlForRestaurant(restaurant);
   text.appendChild(picture);
   li.append(text);
 
+
+  //neighborhood
   const neighborhood = document.createElement('p');
   neighborhood.className = 'fp-neighborhood';
   neighborhood.innerHTML = ` ${restaurant.neighborhood}`;
   li.append(neighborhood);
 
+  //address
   const address = document.createElement('p');
   address.className = 'fp-address';
   address.innerHTML = `Address: ${restaurant.address}`;
   li.append(address);
 
+  //full details
   const link = document.createElement('p');
   link.className = 'link';
   const more = document.createElement('a');
-  more.innerHTML =  restaurant.name + '\'s full details';
+  more.innerHTML = restaurant.name + '\'s full details';
   more.href = DBHelper.urlForRestaurant(restaurant);
   link.appendChild(more);
   li.append(link)
@@ -229,21 +245,22 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     // Add marker to the map
     const marker = DBHelper.mapMarkerForMain(restaurant, self.newMap);
     marker.on("click", onClick);
+
     function onClick() {
       window.location.href = marker.options.url;
     }
     self.markers.push(marker);
   });
 
-} 
+}
 
 //reset filter
 fullrestaurants = () => {
   const all = document.getElementsByTagName('select');
   for (let i of all) {
-    i.selectedIndex = 0; 
+    i.selectedIndex = 0;
   }
-    
+
   const cSelect = document.getElementById('cuisines-select');
   const nSelect = document.getElementById('neighborhoods-select');
 
@@ -258,5 +275,5 @@ fullrestaurants = () => {
       fillRestaurantsHTML();
     }
   })
-  
+
 }
