@@ -53,6 +53,7 @@
   font-family: var(--cursive);
   font-size: 1.1rem;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .inside #rest-name {
@@ -62,6 +63,12 @@
   letter-spacing: 0;
   line-height: 1.1;
   text-align: center;
+  @media screen and (min-width: 1080px) {
+    position: absolute;
+    z-index: 2;
+    background-color: white;
+    padding: .5em;
+  }
 }
 
 .inside #navi-links {

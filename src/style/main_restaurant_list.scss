@@ -1,5 +1,4 @@
 .container {
-
   .restaurant-items,
   #restaurants-list {
     list-style: none;
@@ -15,10 +14,11 @@
 
   .restaurant-items {
     height: 750px;
+
     #restaurant-list {
       @media(min-width: 1024px) {
         height: 300px;
-  
+
         li {
           padding: 0px;
           margin-bottom: 30px;
@@ -33,6 +33,7 @@
           justify-items: start;
           padding-top: 0px;
         }
+
         .fp-address {
           text-align: left;
           width: 100%;
@@ -94,8 +95,10 @@
 }
 
 .fp-neighborhood {
-  visibility: hidden;
-  display: none;
+  border-bottom: 1px solid var(--dark-gray);
+  text-align: center;
+  color: var(--pink);
+  font-weight: bold;
 }
 
 .container article {
@@ -114,7 +117,6 @@
     align-items: center;
     height: auto;
     font-family: var(--cursive);
-    border: 5px solid var(--pink);
   }
 
   h3 {
@@ -122,22 +124,10 @@
     padding: 0px;
     text-align: center;
     width: 100%;
+    align-self: center;
   }
 }
 
-.link a {
-  color: white;
-  text-decoration: none;
-  line-height: .5em;
-  padding: 3%;
-  height: 40px;
-  width: 100%;
-}
-
-.link a:hover,
-.link:hover a {
-  color: var(--dark-gray);
-}
 
 .link {
   text-align: center;
@@ -147,6 +137,24 @@
   padding: 1em;
   box-sizing: border-box;
   transition: .2s;
+  @media screen and (min-width: 1024px) {
+    padding: 10px;
+    margin: 0px;
+  }
+
+  & a {
+    color: white;
+    text-decoration: none;
+    line-height: .5em;
+    height: 40px;
+    width: 100%;
+    @media screen and (min-width: 1024px) {
+      padding: 10px;
+    }
+    &:hover {
+      color: var(--dark-gray);
+    }
+  }
 }
 
 .link:hover {
@@ -165,4 +173,3 @@
     filter: grayscale(100%);
   }
 }
-

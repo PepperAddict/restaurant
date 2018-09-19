@@ -1,0 +1,26 @@
+.rest-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    height: 80px;
+    .favorite {
+        height: 10px;
+        width: 10px;
+    }
+}
+.favIcon {
+    width: 50px;
+    height: 50px;
+    display: block;
+    position: absolute;
+    right: 60px;
+    background-image: url('../images/hearts.png');
+    &:hover {
+        animation: sprite .3s steps(19) forwards;
+    }
+}
+
+@keyframes sprite {
+    100% {
+        background-position: -950px;
+    }
+}
