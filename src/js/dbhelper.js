@@ -47,7 +47,7 @@ class DBHelper {
             datas.forEach((message) => {
               const tx = db.transaction('details', 'readwrite');
               const keyValStore = tx.objectStore('details');
-              return keyValStore.put(message)
+              keyValStore.put(message);
             })
           })
 

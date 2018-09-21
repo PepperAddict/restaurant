@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   fetchCuisines();
 });
 
-
 /**
  * Fetch all neighborhoods and set their HTML.
  */
@@ -146,7 +145,6 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
     const li = document.createElement('li');
     li.className = 'noshow'
     li.innerHTML = 'Sorry! There\'s nothing here. Try a different option.'
-
     ul.append(li)
   }
   restaurants.forEach(restaurant => {
@@ -162,7 +160,6 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = (restaurant) => {
 
   const li = document.createElement('li');
-
   //name
   const div = document.createElement('div');
   div.className = 'rest-head';
@@ -171,23 +168,22 @@ createRestaurantHTML = (restaurant) => {
   name.innerHTML = restaurant.name;
   div.append(name);
 
-  //favicon2
-  const favTwo = document.createElement('div');
+  //favorite icon
+
   const fav = document.createElement('INPUT');
   fav.type = 'checkbox'
-  fav.className = 'favorite'
+  fav.className = 'favorite';
   fav.addEventListener('click', () => {
-    favoriteHandle();
+    handleFavorites(restaurant, fav);
   })
-  favTwo.append(fav)
-  favTwo.className = 'favIcon';
-  div.append(favTwo);
-
+  if (restaurant.is_favorite == 'true') {
+    fav.checked = true
+  }
+  else {
+    fav.checked = false
+  }
+  div.append(fav);
   li.append(div);
-
-
-
-
 
   //picture
   const text = document.createElement('a');

@@ -5,7 +5,7 @@ let apikey = 'pk.eyJ1IjoicGVwcGVyYWRkaWN0IiwiYSI6ImNqa3Y4YmtwdTBvazAza3BhZ20zYnE
 /**
  * Initialize map as soon as the page is loaded.
  */
-document.addEventListener('DOMContentLoaded', (event) => {  
+document.addEventListener('DOMContentLoaded', (event) => {
   initMap();
 });
 
@@ -17,7 +17,7 @@ initMap = () => {
     if (error) { // Got an error!
       console.error(error);
       mapFallback();
-    } else {      
+    } else {
       self.restMap = L.map('map', {
         center: [restaurant.latlng.lat, restaurant.latlng.lng],
         zoom: 12,
@@ -27,17 +27,17 @@ initMap = () => {
         mapboxToken: apikey,
         maxZoom: 18,
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+          '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+          'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         id: 'mapbox.dark',
 
       }).addTo(restMap);
-      
+
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.restMap);
     }
   });
-}  
+}
 mapFallback = () => {
   const mapF = document.getElementById("map")
   mapF.innerHTML = "Sorry, this map application could not be loaded";
@@ -52,6 +52,21 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   document.title = restaurant.name + '\'s information';
   const name = document.getElementById('rest-name');
   name.innerHTML = restaurant.name;
+
+  const div = document.getElementById('rest-head');
+  div.className = 'rest-head';
+  const fav = document.createElement('INPUT');
+  fav.type = 'checkbox'
+  fav.className = 'favorite'
+  fav.addEventListener('click', () => {
+    handleFavorites(restaurant, fav);
+  })
+  if (restaurant.is_favorite == 'true') {
+    fav.checked = true
+  } else {
+    fav.checked = false;
+  }
+  div.append(fav)
 
   const address = document.getElementById('rest-address');
   address.innerHTML = `Address: ${restaurant.address}`;
@@ -108,12 +123,12 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Add restaurant name to the breadcrumb navigation menu
  */
-fillBreadcrumb = (restaurant=self.restaurant) => {
+fillBreadcrumb = (restaurant = self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const serverport = window.location.origin;
   DBHelper.fetchRestaurants((error, restaurants) => {
-    if (error) 
-        console.log(error)
+    if (error)
+      console.log(error)
     else {
       const names = Object.entries(restaurants).forEach(
         ([key, value]) => {
@@ -122,25 +137,64 @@ fillBreadcrumb = (restaurant=self.restaurant) => {
           const a = document.createElement('a');
           a.innerHTML = `${value.name}`;
           a.href = serverport + '/restaurant.html?id=' + value.id;
-          a.target ="_self";
+          a.target = "_self";
           li.appendChild(a);
           breadcrumb.appendChild(li);
-
         });
-        var uri = `${serverport}/restaurant.html?id=${restaurant.id}`;
-        console.log(serverport)
-        var query = document.querySelectorAll('#navi-links a[href="'+uri+'"]');
-        for (let i of query) {
-          if (i == uri) {
-            i.className = 'currentLink';
-          }
-          else console.log(uri + '   ' + i)
-        }
+      var uri = `${serverport}/restaurant.html?id=${restaurant.id}`;
+      console.log(serverport)
+      var query = document.querySelectorAll('#navi-links a[href="' + uri + '"]');
+      for (let i of query) {
+        if (i == uri) {
+          i.className = 'currentLink';
+        } else console.log(uri + '   ' + i)
+      }
     }
-});
+  });
 
 
 
+  dbPromise.then((db) => {
+      const tx = db.transaction('favorites');
+      const keyValStore = tx.objectStore('favorites')
+      return keyValStore.getAll();
+    })
+    .then((stuff) => {
+      if (stuff.length >= 1) {
+        const yul = document.getElementById('navi-links')
+        const label = document.createElement('h3')
+        label.innerHTML = 'Your favorited restaurants'
+        yul.append(label)
+
+        const ul = document.createElement('ul')
+
+        ul.id = 'breadcrumb'
+
+        stuff.forEach((ok) => {
+
+          const li = document.createElement('li')
+          const a = document.createElement('a')
+          a.href = serverport + '/restaurant.html?id=' + ok.id
+          a.innerHTML = ok.name
+          li.append(a)
+          ul.append(li)
+
+        })
+
+
+        yul.append(ul)
+      }
+
+      var uri = `${serverport}/restaurant.html?id=${restaurant.id}`;
+      console.log(serverport)
+      var query = document.querySelectorAll('#navi-links a[href="' + uri + '"]');
+      for (let i of query) {
+        if (i == uri) {
+          i.className = 'currentLink';
+        } else console.log(uri + '   ' + i)
+      }
+
+    })
 }
 
 /**
@@ -156,7 +210,7 @@ fetchRestaurantFromURL = (callback) => {
   if (!id) { // no id found in URL
     error = 'No restaurant id in URL'
     callback(error, null);
-    
+
   } else {
     DBHelper.fetchRestaurantById(id, (error, restaurant) => {
       self.restaurant = restaurant;
@@ -166,7 +220,7 @@ fetchRestaurantFromURL = (callback) => {
       }
       fillRestaurantHTML();
       callback(null, restaurant)
-      
+
     });
   }
 }
@@ -175,8 +229,6 @@ fetchRestaurantFromURL = (callback) => {
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-
-
   if (!reviews) {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';

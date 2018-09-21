@@ -1,23 +1,56 @@
-.rest-head {
+.container {
+    .rest-head {
     display: grid;
     grid-template-columns: 1fr;
     height: 80px;
+
     .favorite {
-        height: 10px;
-        width: 10px;
+        height: 1px;
+        width: 1px;
+        position: relative;
+        margin-top: -70px;
+        margin-left: 280px;
+
+        &:checked:before {
+            animation: sprite .3s steps(19) forwards;
+        }
+
+        &:before {
+            content: ' ';
+            padding: 20px 50px;
+            background-image: url('../images/hearts.png');
+            margin-left: -10px;
+
+        }
     }
 }
-.favIcon {
-    width: 50px;
-    height: 50px;
-    display: block;
-    position: absolute;
-    right: 60px;
-    background-image: url('../images/hearts.png');
-    &:hover {
-        animation: sprite .3s steps(19) forwards;
+}
+.inside {
+    .rest-head {
+        display: grid;
+        grid-template-columns: 1fr;
+        height: 80px;
+    
+        .favorite {
+            height: 1px;
+            width: 1px;
+            position: absolute;
+            &:checked:before {
+                animation: sprite .3s steps(19) forwards;
+            }
+    
+            &:before {
+                content: ' ';
+                padding: 20px 50px;
+                background-image: url('../images/hearts.png');
+                margin-left: -10px;
+    
+            }
+        }
     }
 }
+
+
 
 @keyframes sprite {
     100% {
