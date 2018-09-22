@@ -241,8 +241,8 @@ fetchRestaurantFromURL = (callback) => {
  */
 fillReviewsHTML = (restaurant = self.restaurant) => {
   let reviews;
-  if (!navigator.onLine) {
-    fetch('http://localhost:1337/reviews/')
+  if (navigator.onLine) {
+    fetch('http://localhost:1337/reviews/?restaurant_id=' + restaurant.id)
       .then((response) => {
         return response.json()
       })
@@ -253,7 +253,7 @@ fillReviewsHTML = (restaurant = self.restaurant) => {
             const tx = db.transaction('reviews', 'readwrite');
             const keyValStore = tx.objectStore('reviews');
             keyValStore.put(review)
-            if (review.id === restaurant.id) {
+            if (review.restaurant_id === restaurant.id) {
               createReviewHTML(review)
             }
           })
@@ -268,8 +268,8 @@ fillReviewsHTML = (restaurant = self.restaurant) => {
       })
       .then((datas) => {
         datas.forEach((data) => {
-          if (data.id === restaurant.id) {
-            createReviewHTML(data)
+          if (data.restaurant_id === restaurant.id) {
+            individualReview(data)
           }
         })
       })
@@ -290,6 +290,26 @@ individualReview = (review, li) => {
   rating.innerHTML = `Rating: ${review.rating}`;
   li.appendChild(rating);
 
+  const deleteReview = document.createElement('button')
+  deleteReview.innerHTML = 'delete'
+  deleteReview.addEventListener('click', () => {
+    deleteData = (url = '', data = {}) => {
+      return fetch(url, {
+          method: "delete"
+        })
+        .then((response) => response.json())
+    }
+    deleteData('http://localhost:1337/reviews/' + review.id, review.id)
+      .then((response) => {
+        dbPromise.then((db) => {
+          const tx = db.transaction('reviews', 'readwrite')
+          const keyValStore = tx.objectStore('reviews')
+          return keyValStore.delete(response.id)
+        })
+      })
+
+  })
+  li.appendChild(deleteReview)
   const comments = document.createElement('p');
   comments.className = 'revComment';
   comments.innerHTML = review.comments;
@@ -321,11 +341,11 @@ reviewForm = () => {
   const rating = document.getElementById('rating')
   const review = document.getElementById('your-review')
   submit.type = 'submit'
-  
+
   submit.addEventListener('click', () => {
     const restaurant = self.restaurant
     const formSubmit = {
-      "id": restaurant.id + name.value + rating.value,
+      "id": uniqueID(),
       "restaurant_id": restaurant.id,
       "name": name.value,
       "createdAt": date(),
@@ -333,26 +353,46 @@ reviewForm = () => {
       "rating": rating.value,
       "comments": review.value
     }
+
+
+    postData = (url = '', data = {}) => {
+      return fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          body: JSON.stringify(data),
+        })
+        .then((response) => {
+          return response.json()
+        })
+        .then((data) => {
+          dbPromise.then((db) => {
+            const tx = db.transaction('reviews', 'readwrite')
+            const keyValStore = tx.objectStore('reviews')
+            individualReview(formSubmit)
+            return keyValStore.put(data)
+          })
+          console.log(data)
+        })
+    }
+
+    if (navigator.onLine) {
+      postData('http://localhost:1337/reviews/', formSubmit)
+      .then((data) => console.log(
+        JSON.stringify(data)))
+      .catch(error => console.error(error))
+    }
+    else {
+      console.log('you be offline')
+    }
+
     
-    fetch(`http://localhost:1337/reviews/${restaurant.id}`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-    .then((response) => {
-      return response.json()
-    })
-    .then((data) => {
-      let datas = [data, formSubmit]
-     datas.forEach((inside) => {
-       console.log(inside)
-     })
-     
-    })
+
+
+
   })
-  
+
 }
 
 
