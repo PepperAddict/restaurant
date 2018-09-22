@@ -21,11 +21,26 @@ let dbPromise = idb.open('Restaurant-Database', 1, (upgradeDB) => {
     upgradeDB.createObjectStore('favorites', {
         keyPath: 'id'
     })
+    upgradeDB.createObjectStore('reviews', {
+        keyPath: 'id'
+    })
 })
+date = () => {
+    let d = new Date();
+    let month = d.getMonth()+1;
+    let day = d.getDate();
 
+    let hour = d.getHours();
+    let minute = d.getMinutes();
+
+    let output =  + 
+    (('' + month).length<2 ? '0' : '') + month + '-' +
+    (('' + day).length<2 ? '0' : '') + day + '-' + d.getFullYear() + ' | ' + hour + ':' + minute;
+    return output
+}
 handleFavorites = async (restaurant, fav) => {
-    const url = 'http://localhost:1337/restaurants/' + restaurant.id +'/?is_favorite=true';
-    const urlTwo = 'http://localhost:1337/restaurants/' + restaurant.id +'/?is_favorite=false';
+    const url = 'http://localhost:1337/restaurants/' + restaurant.id + '/?is_favorite=true';
+    const urlTwo = 'http://localhost:1337/restaurants/' + restaurant.id + '/?is_favorite=false';
     const config = {
         method: 'POST',
         headers: {
@@ -36,46 +51,42 @@ handleFavorites = async (restaurant, fav) => {
     }
     let favy;
     if (fav.checked) {
-    const response = await fetch(url, config)
-        .then((response => response.json()))
-        .then((json) => {
-            console.log(fav.checked)
-            favy = json;
-            return fav.checked = true
-        })
+        await fetch(url, config)
+            .then((response => response.json()))
+            .then((json) => {
+                favy = json;
+                dbPromise.then((db) => {
+                    const tx = db.transaction('favorites', 'readwrite');
+                    const keyValStore = tx.objectStore('favorites');
+                    return keyValStore.put(favy)
+                })
+            })
+    } else {
+        await fetch(urlTwo, config)
+            .then((response) => response.json())
+            .then((json) => {
+                favy = json;
+                dbPromise.then((db) => {
+                    const tx = db.transaction('favorites', 'readwrite');
+                    const keyValStore = tx.objectStore('favorites');
+                    return keyValStore.delete(favy.id)
+                })
+            })
     }
-    else {
-        const response = await fetch(urlTwo, config)
-        .then((response) => response.json())
-        .then((json) => {
-            console.log(fav.checked)
-            favy = json;
-            return fav.checked = false
-        })
-    }
-    console.log(favy)
-
-    dbPromise.then((db) => {
-        const tx = db.transaction('details', 'readwrite');
-        const keyValStore = tx.objectStore('details');
-        return keyValStore.put(favy)
-    })
 }
-
 storeFavorites = () => {
     fetch('http://localhost:1337/restaurants/?is_favorite=true')
-    .then((response) => {
-      return response.json()
-    })
-    .then((data) => {
-      dbPromise.then((db) => {
-          data.forEach((items) => {
-              const tx = db.transaction('favorites', 'readwrite');
-          const keyValStore = tx.objectStore('favorites');
-          keyValStore.put(items)
-          }
-      )})
-    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            dbPromise.then((db) => {
+                data.forEach((items) => {
+                    const tx = db.transaction('favorites', 'readwrite');
+                    const keyValStore = tx.objectStore('favorites');
+                    keyValStore.put(items)
+                })
+            })
+        })
 }
 storeFavorites();
-

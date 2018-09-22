@@ -8,8 +8,7 @@
         height: 1px;
         width: 1px;
         position: relative;
-        margin-top: -70px;
-        margin-left: 280px;
+        text-align: center;
 
         &:checked:before {
             animation: sprite .3s steps(19) forwards;
