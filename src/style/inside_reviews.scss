@@ -5,6 +5,11 @@
     background: var(--dark-gray);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    button {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+    }
   }
   #reviews-list li {
     background-color: var(--off-white);

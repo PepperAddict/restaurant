@@ -25,6 +25,9 @@ let dbPromise = idb.open('Restaurant-Database', 1, (upgradeDB) => {
         keyPath: 'id'
     })
 })
+uniqueID = () => {
+    return Date.now()
+}
 date = () => {
     let d = new Date();
     let month = d.getMonth()+1;
