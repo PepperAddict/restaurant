@@ -7,6 +7,8 @@ let toCache = [
     './src/js/dbhelper.js',
     './src/js/index.js',
     './src/js/restaurant_info.js',
+    'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
+    'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js'
 ]
 
 self.addEventListener('install', (event) => {
@@ -30,11 +32,11 @@ self.addEventListener('fetch', (event) => {
                 .then(networkResponse => {
                     let network = networkResponse.clone()
                     let eventCall = event.request
-                    
+
                     caches.open(CACHE_NAME)
-                    .then(cache => {
-                        return (eventCall.method == 'POST') ? false : cache.put(eventCall, network)
-                    })
+                        .then(cache => {
+                            return (eventCall.method == 'POST') ? false : cache.put(eventCall, network)
+                        })
                     return networkResponse
                 })
                 .catch(error => {
@@ -51,7 +53,7 @@ self.addEventListener('activate', (event) => {
         caches.keys().then((cacheNames) => {
             for (let name of cacheNames)
                 console.log(name)
-                caches.delete(name)
+            caches.delete(name)
         })
     )
 })

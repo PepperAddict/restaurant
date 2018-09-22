@@ -115,6 +115,33 @@
  #reviews-container {
    box-sizing: border-box;
    width: 100%;
+   form {
+     grid-row: 3;
+     grid-gap: 15px;
+     display: grid;
+     grid-template-rows: auto 15px 30px 15px 30px 15px 200px;
+     padding: 10px 30px 100px;
+     background: var(--dark-gray);
+     color: white;
+     #rating {
+       width: 100px;
+     }
+     
+     h3 {
+       border-bottom: 1px solid white;
+     }
+     #review-submit {
+       background: var(--mid-blue);
+       text-transform: uppercase;
+       color: white;
+       border: 0px;
+       height: 50px;
+       cursor: pointer;
+       font-size: 18px;
+       font-weight: 400;
+
+     }
+   }
  }
 
  .inside {
