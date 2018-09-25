@@ -1,4 +1,4 @@
-let CACHE_NAME = 'RRC-v1.1'
+let CACHE_NAME = 'RRC-v1.2'
 let staticCacheName
 let toCache = [
     'offline.html',
@@ -7,6 +7,7 @@ let toCache = [
     './src/js/dbhelper.js',
     './src/js/index.js',
     './src/js/restaurant_info.js',
+    './src/js/registerSW.js',
     'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
     'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js'
 ]

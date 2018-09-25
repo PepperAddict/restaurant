@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap();
   showFavorites();
   reviewForm();
+
+  storeOfflineReviews(self.restaurant);
+
   dropDownNavi();
 });
 dropDownNavi = (e) => {
@@ -21,6 +24,9 @@ dropDownNavi = (e) => {
     drop.classList.remove('hide')
   })
 }
+
+
+
 /**
  * Initialize leaflet map
  */
@@ -445,17 +451,31 @@ reviewForm = () => {
       "comments": review.value
     }
 
-    if (navigator.onLine) {
+    if (!navigator.onLine) {
+      //sending it to server
       postData('http://localhost:1337/reviews/', formSubmit)
         .then((data) => console.log(
           JSON.stringify(data)))
         .then((data) => {
+          //make sure you send it to IDB too
+          dbPromise.then((db) => {
+            const tx = db.transaction('reviews', 'readwrite')
+            const keyValStore = tx.objectStore('reviews')
+            keyValStore.put(formSubmit)
+          })
           individualReview(formSubmit)
         })
 
         .catch(error => console.error(error))
     } else {
-      console.log('you be offline')
+      //only sending it to IDB
+      console.log('Submitted Review to IDB')
+      dbPromise.then((db) => {
+        const tx = db.transaction('reviews', 'readwrite')
+        const keyValStore = tx.objectStore('reviews')
+        keyValStore.put(formSubmit)
+        individualReview(formSubmit)
+      })
     }
   })
 
@@ -476,4 +496,54 @@ getParameterByName = (name, url) => {
   if (!results[2])
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+
+storeOfflineReviews = () => {
+  let offline = new Array;
+  let online = new Array;
+
+  dbPromise.then((db) => {
+      const tx = db.transaction('reviews', 'readwrite');
+      const keyValStore = tx.objectStore('reviews');
+      return keyValStore.getAll();
+    })
+    .then((data) => {
+      fetch('http://localhost:1337/reviews/?restaurant_id=' + self.restaurant.id)
+        .then((response) => {
+          return response.json()
+        })
+        .then((json) => {
+          json.forEach((jso) => {
+
+            if (jso.restaurant_id === self.restaurant.id) {
+              let ob = jso
+              return online.push(ob)
+            }
+          })
+        })
+      data.forEach((single) => {
+        if (single.restaurant_id === self.restaurant.id) {
+          return offline.push(single);
+        }
+      })
+
+      setTimeout(() => {
+        console.log(offline)
+        console.log(online)
+        //time to add differences in server
+        if (offline.length !== online.length) {
+          console.log('syncing with IDB')
+          let result = offline.filter(o1 => !online.some(o2 => o1.id === o2.id));  
+            fetch('http://localhost:1337/reviews/?restaurant_id=' + self.restaurant.id, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json; charset=utf-8"
+                },
+                body: JSON.stringify(result),
+              })
+          }
+        
+      }, 50)
+    })
 }
