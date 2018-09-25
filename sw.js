@@ -1,9 +1,10 @@
-let CACHE_NAME = 'RRC-v1.2'
+let CACHE_NAME = 'RRC-v1.3'
 let staticCacheName
 let toCache = [
     'offline.html',
     './restaurant.html',
     './build/css/style.min.css',
+    './build/images/',
     './src/js/dbhelper.js',
     './src/js/index.js',
     './src/js/restaurant_info.js',

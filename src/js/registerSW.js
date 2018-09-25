@@ -95,3 +95,8 @@ storeFavorites = () => {
 storeFavorites();
 
 
+messageToREFRESH = () => {
+  if (confirm('This page is out of date! Please refresh the page to update.')) {
+      window.location.reload();
+  }
+}

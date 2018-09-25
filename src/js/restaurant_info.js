@@ -333,7 +333,10 @@ individualReview = (review, li) => {
 
 
   const editReview = document.createElement('button')
+
   editReview.innerHTML = 'edit'
+
+
   editReview.addEventListener('click', () => {
     const deletes = document.getElementById('delete-review')
     deletes.addEventListener('click', () => {
@@ -451,7 +454,7 @@ reviewForm = () => {
       "comments": review.value
     }
 
-    if (!navigator.onLine) {
+    if (navigator.onLine) {
       //sending it to server
       postData('http://localhost:1337/reviews/', formSubmit)
         .then((data) => console.log(
@@ -515,7 +518,6 @@ storeOfflineReviews = () => {
         })
         .then((json) => {
           json.forEach((jso) => {
-
             if (jso.restaurant_id === self.restaurant.id) {
               let ob = jso
               return online.push(ob)
@@ -528,22 +530,26 @@ storeOfflineReviews = () => {
         }
       })
 
-      setTimeout(() => {
-        console.log(offline)
-        console.log(online)
-        //time to add differences in server
-        if (offline.length !== online.length) {
-          console.log('syncing with IDB')
-          let result = offline.filter(o1 => !online.some(o2 => o1.id === o2.id));  
+      if (navigator.onLine) {
+        setTimeout(() => {
+          console.log(offline)
+          console.log(online)
+          //time to add differences in server
+          if (offline.length > online.length) {
+            console.log('syncing with IDB')
+            let result = offline.filter(o1 => !online.some(o2 => o1.id === o2.id));
             fetch('http://localhost:1337/reviews/?restaurant_id=' + self.restaurant.id, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json; charset=utf-8"
-                },
-                body: JSON.stringify(result),
-              })
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json; charset=utf-8"
+              },
+              body: JSON.stringify(result),
+            })
+
+            messageToREFRESH()
           }
-        
-      }, 50)
+        }, 100)
+      }
+
     })
 }
