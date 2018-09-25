@@ -1,58 +1,43 @@
-.container {
-    .rest-head {
+.rest-head {
     display: grid;
     grid-template-columns: 1fr;
-    height: 80px;
 
     .favorite {
-        height: 1px;
-        width: 1px;
-        position: relative;
-        text-align: center;
+        height: 40px;
+        width: 40px;
+        display: grid;
+        visibility: hidden;
+        cursor: pointer;
 
         &:checked:before {
-            animation: sprite .3s steps(19) forwards;
+            animation: sprite .7s steps(49) forwards;
         }
 
         &:before {
             content: ' ';
-            padding: 20px 50px;
-            background-image: url('../images/hearts.png');
-            margin-left: -10px;
+            visibility: visible;
+            background-image: url('../images/heart4.png');
 
         }
     }
 }
-}
-.inside {
+
+.container {
     .rest-head {
-        display: grid;
-        grid-template-columns: 1fr;
         height: 80px;
-    
-        .favorite {
-            height: 1px;
-            width: 1px;
-            position: absolute;
-            &:checked:before {
-                animation: sprite .3s steps(19) forwards;
-            }
-    
-            &:before {
-                content: ' ';
-                padding: 20px 50px;
-                background-image: url('../images/hearts.png');
-                margin-left: -10px;
-    
-            }
-        }
+
     }
 }
 
+.inside {
 
+    .rest-head {
+        height: 40px;
+    }
+}
 
 @keyframes sprite {
     100% {
-        background-position: -950px;
+        background-position: -1960px;
     }
 }

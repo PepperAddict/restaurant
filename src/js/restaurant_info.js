@@ -9,8 +9,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap();
   showFavorites();
   reviewForm();
+  dropDownNavi();
 });
-
+dropDownNavi = (e) => {
+  const toggle = document.getElementById('toggle')
+  const drop = document.getElementById('navi-links')
+  toggle.addEventListener('click', () => {
+    drop.classList.toggle('hide')
+  })
+  drop.addEventListener('click', () => {
+    drop.classList.remove('hide')
+  })
+}
 /**
  * Initialize leaflet map
  */
@@ -253,9 +263,7 @@ fillReviewsHTML = (restaurant = self.restaurant) => {
             const tx = db.transaction('reviews', 'readwrite');
             const keyValStore = tx.objectStore('reviews');
             keyValStore.put(review)
-            if (review.restaurant_id === restaurant.id) {
-              createReviewHTML(review)
-            }
+            createReviewHTML(review)
           })
         })
       })
@@ -276,6 +284,33 @@ fillReviewsHTML = (restaurant = self.restaurant) => {
   }
 }
 
+deleteData = (url = '', data = {}) => {
+  return fetch(url, {
+      method: "delete"
+    })
+    .then((response) => response.json())
+}
+postData = (url = '', data = {}) => {
+  return fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify(data),
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((data) => {
+      dbPromise.then((db) => {
+        const tx = db.transaction('reviews', 'readwrite')
+        const keyValStore = tx.objectStore('reviews')
+        return keyValStore.put(data)
+      })
+      console.log(data)
+    })
+}
+
 individualReview = (review, li) => {
   const container = document.getElementById('reviews-container');
   const ul = document.getElementById('reviews-list');
@@ -290,32 +325,88 @@ individualReview = (review, li) => {
   rating.innerHTML = `Rating: ${review.rating}`;
   li.appendChild(rating);
 
-  const deleteReview = document.createElement('button')
-  deleteReview.innerHTML = 'delete'
-  deleteReview.addEventListener('click', () => {
-    deleteData = (url = '', data = {}) => {
-      return fetch(url, {
-          method: "delete"
-        })
-        .then((response) => response.json())
-    }
-    deleteData('http://localhost:1337/reviews/' + review.id, review.id)
-      .then((response) => {
-        dbPromise.then((db) => {
-          const tx = db.transaction('reviews', 'readwrite')
-          const keyValStore = tx.objectStore('reviews')
-          return keyValStore.delete(response.id)
-        })
-      })
+
+  const editReview = document.createElement('button')
+  editReview.innerHTML = 'edit'
+  editReview.addEventListener('click', () => {
+    const deletes = document.getElementById('delete-review')
+    deletes.addEventListener('click', () => {
+      if (navigator.onLine) {
+        deleteData('http://localhost:1337/reviews/' + review.id, review.id)
+          .then((response) => {
+            dbPromise.then((db) => {
+                const tx = db.transaction('reviews', 'readwrite')
+                const keyValStore = tx.objectStore('reviews')
+                return keyValStore.delete(response.id)
+              })
+              .then(() => {
+                location.reload();
+              })
+          })
+      } else {
+        console.log('you are offline. You cannot delete')
+      }
+    })
+    const edit = document.getElementById('edit')
+    edit.classList.toggle('hide')
+    const close = document.getElementById('close')
+    close.addEventListener('click', () => {
+      edit.classList.toggle('hide')
+    })
+    edit.append(close)
+
+    const ename = document.getElementById('ename');
+    ename.value = review.name;
+    const erating = document.getElementById('erating');
+    erating.value = review.rating;
+    const ereview = document.getElementById('eyour-review');
+    ereview.value = review.comments
+    const esub = document.getElementById('edit-submit')
+    esub.type = 'submit'
+    esub.addEventListener('click', () => {
+      const restaurant = self.restaurant
+      const formSubmit = {
+        "id": review.id,
+        "restaurant_id": restaurant.id,
+        "name": ename.value,
+        "createdAt": review.createdAt,
+        "updatedAt": date(),
+        "rating": erating.value,
+        "comments": ereview.value
+      }
+      if (navigator.onLine) {
+        //delete first
+        deleteData('http://localhost:1337/reviews/' + review.id, review.id)
+          .then((response) => {
+            dbPromise.then((db) => {
+              const tx = db.transaction('reviews', 'readwrite')
+              const keyValStore = tx.objectStore('reviews')
+              return keyValStore.delete(response.id)
+            })
+          })
+        //create new review in its place
+        postData('http://localhost:1337/reviews/', formSubmit)
+          .then((data) => console.log(
+            JSON.stringify(data)))
+          .then((e) => {
+            location.reload();
+          })
+          .catch(error => console.error(error))
+      } else {
+        console.log('you are offline')
+      }
+
+    })
 
   })
-  li.appendChild(deleteReview)
+  li.appendChild(editReview)
   const comments = document.createElement('p');
   comments.className = 'revComment';
   comments.innerHTML = review.comments;
   li.appendChild(comments);
   ul.appendChild(li)
   container.appendChild(ul)
+
 }
 /**
  * Create review HTML and add it to the webpage.
@@ -354,43 +445,18 @@ reviewForm = () => {
       "comments": review.value
     }
 
-
-    postData = (url = '', data = {}) => {
-      return fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json; charset=utf-8"
-          },
-          body: JSON.stringify(data),
-        })
-        .then((response) => {
-          return response.json()
-        })
-        .then((data) => {
-          dbPromise.then((db) => {
-            const tx = db.transaction('reviews', 'readwrite')
-            const keyValStore = tx.objectStore('reviews')
-            individualReview(formSubmit)
-            return keyValStore.put(data)
-          })
-          console.log(data)
-        })
-    }
-
     if (navigator.onLine) {
       postData('http://localhost:1337/reviews/', formSubmit)
-      .then((data) => console.log(
-        JSON.stringify(data)))
-      .catch(error => console.error(error))
-    }
-    else {
+        .then((data) => console.log(
+          JSON.stringify(data)))
+        .then((data) => {
+          individualReview(formSubmit)
+        })
+
+        .catch(error => console.error(error))
+    } else {
       console.log('you be offline')
     }
-
-    
-
-
-
   })
 
 }

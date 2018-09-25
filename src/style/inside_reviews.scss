@@ -1,3 +1,22 @@
+#edit.hide {
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+}
+#edit {
+  position: fixed;
+  width: 50%;
+  height: 50%;
+  z-index:10;
+  top: 0;
+  left: -990px;
+  background: var(--pink);
+  form {
+    width: 80%;
+    height: 80%;
+  }
+}
 #reviews-list {
     margin: 0;
     padding: 0;
