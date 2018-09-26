@@ -8,7 +8,6 @@ let toCache = [
     './src/js/dbhelper.js',
     './src/js/index.js',
     './src/js/restaurant_info.js',
-    './src/js/registerSW.js',
     'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
     'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js'
 ]
@@ -23,6 +22,12 @@ self.addEventListener('install', (event) => {
             console.log('no worky' + err)
         })
     )
+    if (navigator.onLine) {
+        self.skipWaiting();
+        console.log('hello')
+    }
+    
+
 })
 
 self.addEventListener('fetch', (event) => {
@@ -53,9 +58,19 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((cacheNames) => {
-            for (let name of cacheNames)
-                console.log(name)
-            caches.delete(name)
+            if (cacheNames.length > 0) {
+                cacheNames.forEach((name) => {
+                    if (name !== CACHE_NAME) {
+                        caches.delete(name)
+                    }
+                })
+            }
         })
+    )
+})
+
+self.addEventListener('message', (event) => {
+    event.respondWith(
+        console.log('update')
     )
 })

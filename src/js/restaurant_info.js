@@ -546,7 +546,6 @@ storeOfflineReviews = () => {
               body: JSON.stringify(result),
             })
 
-            messageToREFRESH()
           }
         }, 100)
       }
