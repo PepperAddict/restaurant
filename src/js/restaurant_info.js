@@ -9,9 +9,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap();
   showFavorites();
   reviewForm();
-
-  storeOfflineReviews(self.restaurant);
-
   dropDownNavi();
 });
 dropDownNavi = (e) => {
@@ -257,6 +254,8 @@ fetchRestaurantFromURL = (callback) => {
  */
 fillReviewsHTML = (restaurant = self.restaurant) => {
   let reviews;
+
+  //online or offline
   if (navigator.onLine) {
     fetch('http://localhost:1337/reviews/?restaurant_id=' + restaurant.id)
       .then((response) => {
@@ -264,14 +263,72 @@ fillReviewsHTML = (restaurant = self.restaurant) => {
       })
       .then((data) => {
         reviews = data;
+        let online = new Array;
+        let offline = new Array;
         reviews.forEach((review) => {
-          dbPromise.then((db) => {
-            const tx = db.transaction('reviews', 'readwrite');
-            const keyValStore = tx.objectStore('reviews');
-            keyValStore.put(review)
-            createReviewHTML(review)
-          })
+          online.push(review)
+          //send it to IDB
+          if (IDBObjectStore) {
+            dbPromise.then((db) => {
+              const tx = db.transaction('reviews', 'readwrite');
+              const keyValStore = tx.objectStore('reviews');
+              return keyValStore.put(review)
+            })
+          }
         })
+
+        if (IDBObjectStore) {
+          dbPromise.then((db) => {
+              const tx = db.transaction('reviews', 'readwrite')
+              const keyValStore = tx.objectStore('reviews')
+              return keyValStore.getAll();
+            })
+            .then((all) => {
+              //now to figure out which one to show
+              all.forEach((alloffline) => {
+                if (alloffline.restaurant_id === restaurant.id) {
+                  offline.push(alloffline)
+                }
+              })
+              if (online >= offline) {
+                console.log('retrieved reviews from the server')
+                let result = online.filter(o1 => !offline.some(o2 => o1.id === o2.id));
+                result.forEach((ok) => {
+                  dbPromise.then((db) => {
+                    const tx = db.transaction('reviews', 'readwrite')
+                    const keyValStore = tx.objectStore('reviews')
+                    return keyValStore.put(ok)
+                  })
+                })
+                online.forEach((all) => {
+                  createReviewHTML(all)
+                })
+              } else if (offline > online) {
+                console.log('retrieved reviews from IDB')
+                //sync IDB with Server
+                let result = offline.filter(o1 => !online.some(o2 => o1.id === o2.id));
+                result.forEach((ok) => {
+                  fetch('http://localhost:1337/reviews/?restaurant_id=' + self.restaurant.id, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json; charset=utf-8"
+                    },
+                    body: JSON.stringify(ok)
+                  })
+                  
+                })
+                offline.forEach((all) => {
+                  createReviewHTML(all)
+                })
+              }
+            })
+            
+        } else {
+          online.forEach((all) => {
+            createReviewHTML(all)
+          })
+        }
+
       })
   } else {
     dbPromise.then((db) => {
@@ -283,11 +340,13 @@ fillReviewsHTML = (restaurant = self.restaurant) => {
       .then((datas) => {
         datas.forEach((data) => {
           if (data.restaurant_id === restaurant.id) {
-            individualReview(data)
+            offline.push(data)
+            createReviewHTML(data)
           }
         })
       })
   }
+
 }
 
 deleteData = (url = '', data = {}) => {
@@ -333,8 +392,9 @@ individualReview = (review, li) => {
 
 
   const editReview = document.createElement('button')
+  editReview.className = 'edit'
 
-  editReview.innerHTML = 'edit'
+  editReview.innerHTML = '✎'
 
 
   editReview.addEventListener('click', () => {
@@ -360,7 +420,7 @@ individualReview = (review, li) => {
     edit.classList.toggle('hide')
     const close = document.getElementById('close')
     close.addEventListener('click', () => {
-      edit.classList.toggle('hide')
+      edit.classList.remove('hide')
     })
     edit.append(close)
 
@@ -499,56 +559,4 @@ getParameterByName = (name, url) => {
   if (!results[2])
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-
-
-storeOfflineReviews = () => {
-  let offline = new Array;
-  let online = new Array;
-
-  dbPromise.then((db) => {
-      const tx = db.transaction('reviews', 'readwrite');
-      const keyValStore = tx.objectStore('reviews');
-      return keyValStore.getAll();
-    })
-    .then((data) => {
-      fetch('http://localhost:1337/reviews/?restaurant_id=' + self.restaurant.id)
-        .then((response) => {
-          return response.json()
-        })
-        .then((json) => {
-          json.forEach((jso) => {
-            if (jso.restaurant_id === self.restaurant.id) {
-              let ob = jso
-              return online.push(ob)
-            }
-          })
-        })
-      data.forEach((single) => {
-        if (single.restaurant_id === self.restaurant.id) {
-          return offline.push(single);
-        }
-      })
-
-      if (navigator.onLine) {
-        setTimeout(() => {
-          console.log(offline)
-          console.log(online)
-          //time to add differences in server
-          if (offline.length > online.length) {
-            console.log('syncing with IDB')
-            let result = offline.filter(o1 => !online.some(o2 => o1.id === o2.id));
-            fetch('http://localhost:1337/reviews/?restaurant_id=' + self.restaurant.id, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json; charset=utf-8"
-              },
-              body: JSON.stringify(result),
-            })
-
-          }
-        }, 100)
-      }
-
-    })
 }

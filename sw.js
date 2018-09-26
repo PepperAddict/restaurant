@@ -24,7 +24,6 @@ self.addEventListener('install', (event) => {
     )
     if (navigator.onLine) {
         self.skipWaiting();
-        console.log('hello')
     }
     
 
