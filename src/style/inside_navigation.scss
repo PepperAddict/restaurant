@@ -3,6 +3,7 @@
   position: fixed;
 
   #toggle {
+
     .tooltip {
       visibility: hidden;
       color: white;
@@ -16,6 +17,11 @@
       top: 40px;
       background: var(--dark-gray);
       border-radius: 0px 15px 15px 15px;
+
+      @media screen and (max-width: 700px) {
+        top: 0px;
+        left: 95px;
+      }
     }
 
     &:hover {
@@ -42,7 +48,7 @@
     }
   }
 
-  img {
+  .arrow {
     width: 50px;
     position: absolute;
     margin-top: -10px;
@@ -50,17 +56,29 @@
     z-index: 4;
     background: var(--dark-gray);
     border-radius: 0px 50% 50%;
-    padding: 15px 15px 0px 15px;
+    padding: 25px 25px 25px 15px;
+    color: var(--pink);
     cursor: pointer;
+    display: grid;
+    justify-items: center;
+    align-items: center;
 
-    @media (max-width: 700px) {
-      position: fixed;
-
-
-      &:hover {
-        opacity: 1;
-      }
+    #arrow {
+      transform: rotate(205deg);
+      justify-self: center;
+      align-self: center;
+      font-size: 30px;
+      line-height: 1em;
+      padding: 0px;
+      margin: 0px;
+      transition: .5s;
     }
+
+    #arrow.focus {
+      transform: rotate(90deg);
+
+    }
+
   }
 }
 
@@ -83,6 +101,7 @@
   text-align: center;
   box-sizing: border-box;
   background-color: var(--dark-gray);
+  padding-top: 50px;
 }
 
 .inside #rest-name {
@@ -94,7 +113,9 @@
   line-height: 1.1;
   text-align: center;
 
+
   @media screen and (min-width: 1080px) {
+
     z-index: 2;
     background-color: var(--dark-gray);
     padding: .5em;
@@ -119,14 +140,12 @@
 
   &.hide {
     display: block;
-    background: var(--dark-gray)
+    background: var(--dark-gray);
   }
-
 
   @media (min-width: 700px) {
     transition: top .3s ease-in-out;
     background: var(--dark-gray);
-    padding-top: 100px;
     position: relative;
     overflow-y: hidden;
     min-height: 10px;
@@ -216,6 +235,7 @@
 
 #breadcrumb li {
   width: 50%;
+
   @media screen and (max-width: 600px) {
     width: 100%;
   }
@@ -242,17 +262,23 @@
 
 /* Add a color on mouse-over */
 #mainlinks {
-  margin-top: 130px;
+  margin-top: 90px;
   display: flex;
   padding-left: 0px;
-
-  @media (min-width: 700px) {
-    margin-top: auto;
-  }
 
   @media (max-width: 699px) {
     align-content: center;
     justify-content: center;
+    margin-top: 55px;
+
+    a {
+      width: auto;
+
+      li {
+        width: auto;
+      }
+    }
+
   }
 
   li {
@@ -264,6 +290,7 @@
     padding: 5px;
     border-bottom: 5px solid white;
     cursor: pointer;
+
     a {
       height: 100%;
       width: 100%;
@@ -273,6 +300,7 @@
       background: none !important;
       color: white !important;
       border-bottom: 5px solid var(--yellow);
+
       a {
         color: white;
       }

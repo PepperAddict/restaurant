@@ -8,6 +8,7 @@ let toCache = [
     './src/js/dbhelper.js',
     './src/js/index.js',
     './src/js/restaurant_info.js',
+    './src/js/registerSW.js',
     'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
     'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js'
 ]
@@ -65,11 +66,5 @@ self.addEventListener('activate', (event) => {
                 })
             }
         })
-    )
-})
-
-self.addEventListener('message', (event) => {
-    event.respondWith(
-        console.log('update')
     )
 })

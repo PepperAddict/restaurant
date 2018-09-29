@@ -12,14 +12,22 @@
 <body class="inside">
   <nav>
     <div id="toggle">
-      <img src="build/images/logo.svg" alt="Restaurant Review">
+      <span class="arrow">
+        <p id="arrow">➤</p>
+      </span>
       <span class="tooltip">Navigation </span>
     </div>
     <div id="navi-links">
       <ul aria-label="restaurant navigation" id="mainlinks">
-        <li> <a role="link" href="http://localhost:8000">Home</a></li>
-        <li> <a role="link" href="#restaurant-container">Information</a></li>
-        <li><a role="link" href="#reviews-container">Reviews</a></li>
+        <a role="link" href="/">
+          <li> Home</li>
+        </a>
+        <a role="link" href="#restaurant-container">
+          <li> Information</li>
+        </a>
+        <a role="link" href="#reviews-container">
+          <li>Reviews</li>
+        </a>
       </ul>
       <h3>Other Restaurants:</h3>
       <ul aria-label="list of other restaurants" id="breadcrumb"></ul>
@@ -46,8 +54,9 @@
     </section>
     <section id="reviews-container">
       <h2>Reviews</h2>
-      <ul id="reviews-list"></ul>      
-      <form action="javascript:console.log('submitted');"><h3>Submit Your Own Review</h3>
+      <ul id="reviews-list"></ul>
+      <form action="javascript:console.log('submitted');">
+        <h3>Submit Your Own Review</h3>
         <label for="name">Name</label>
         <input type="text" id="name" name="name" placeholder="your name...">
 
@@ -59,7 +68,7 @@
         <input value="submit review" id="review-submit">
       </form>
 
-      
+
 
     </section>
   </main>
@@ -68,7 +77,8 @@
   </footer>
   <div id="edit" class="show">
     <div id="close">×</div>
-    <form action="javascript:console.log('submitted');"><h3>Edit Your Review</h3>
+    <form action="javascript:console.log('submitted');">
+      <h3>Edit Your Review</h3>
       <label for="ename">Name</label>
       <input type="text" id="ename" name="name">
 
@@ -89,7 +99,7 @@
   <script type="application/javascript" charset="utf-8" src="src/js/registerSW.js"></script>
   <script type="text/javascript" src="src/js/dbhelper.js"></script>
   <script type="text/javascript" src="src/js/restaurant_info.js"></script>
-  
+
 </body>
 
 </html>

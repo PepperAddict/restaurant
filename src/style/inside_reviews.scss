@@ -95,11 +95,11 @@
       border: 0px;
       cursor: pointer;
       font-size: 20px;
-      color: var(--dark-gray);
-      transform: rotate(90deg);
-      &:hover {
-        color: var(--pink)
+      img {
+        width: 30px;
+        height: 30px;
       }
+
     }
   }
 
