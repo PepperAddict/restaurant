@@ -6,23 +6,86 @@ const serverport = window.location.origin;
  * Initialize map as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
+  DBclean();
   initMap();
   showFavorites();
   reviewForm();
   dropDownNavi();
 });
+
+DBclean = () => {
+  // cleaning the database!
+  const toDelete = new Array;
+  if (navigator.onLine) {
+    fetch('http://localhost:1337/reviews/')
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        data.forEach((empties) => {
+          //let's first delete the empty names
+          if (empties.name === undefined || empties.name === '') {
+            fetch('http://localhost:1337/reviews/' + empties.id, {
+              method: 'delete',
+            })
+          }
+
+        })
+        //let's do the same for IDB 
+        dbPromise.then((db) => {
+            const tx = db.transaction('reviews', 'readwrite')
+            const keyValStore = tx.objectStore('reviews')
+            return keyValStore.getAll();
+          })
+          .then((all) => {
+            all.forEach((each) => {
+              if (each.name === undefined || each.name === '') {
+                dbPromise.then((db) => {
+                  const tx = db.transaction('reviews', 'readwrite')
+                  const keyValStore = tx.objectStore('reviews')
+                  return keyValStore.delete(each.id)
+                })
+
+              }
+
+            })
+          })
+      })
+  }
+
+  
+
+
+}
+
 dropDownNavi = (e) => {
   const toggle = document.getElementById('toggle')
   const drop = document.getElementById('navi-links')
+  const arrow = document.getElementById('arrow')
+
+  // if toggle is clicked: close
   toggle.addEventListener('click', () => {
-    drop.classList.toggle('hide')
+    if (drop.classList.contains('hide')) {
+      arrow.classList.remove('focus')
+      drop.classList.remove('hide')
+    } else {
+      arrow.classList.add('focus')
+      drop.classList.add('hide')
+    }
+
   })
+  // if the entire navigator is clicked: close
   drop.addEventListener('click', () => {
-    drop.classList.remove('hide')
+    if (drop.classList.contains('hide')) {
+      arrow.classList.remove('focus')
+      drop.classList.remove('hide')
+    } else {
+      arrow.classList.add('focus')
+      drop.classList.add('hide')
+    }
   })
+
 }
-
-
 
 /**
  * Initialize leaflet map
@@ -254,6 +317,8 @@ fetchRestaurantFromURL = (callback) => {
  */
 fillReviewsHTML = (restaurant = self.restaurant) => {
   let reviews;
+  let online = new Array;
+  let offline = new Array;
 
   //online or offline
   if (navigator.onLine) {
@@ -262,11 +327,12 @@ fillReviewsHTML = (restaurant = self.restaurant) => {
         return response.json()
       })
       .then((data) => {
+        
         reviews = data;
-        let online = new Array;
-        let offline = new Array;
         reviews.forEach((review) => {
           online.push(review)
+
+
           //send it to IDB
           if (IDBObjectStore) {
             dbPromise.then((db) => {
@@ -290,39 +356,8 @@ fillReviewsHTML = (restaurant = self.restaurant) => {
                   offline.push(alloffline)
                 }
               })
-              if (online >= offline) {
-                console.log('retrieved reviews from the server')
-                let result = online.filter(o1 => !offline.some(o2 => o1.id === o2.id));
-                result.forEach((ok) => {
-                  dbPromise.then((db) => {
-                    const tx = db.transaction('reviews', 'readwrite')
-                    const keyValStore = tx.objectStore('reviews')
-                    return keyValStore.put(ok)
-                  })
-                })
-                online.forEach((all) => {
-                  createReviewHTML(all)
-                })
-              } else if (offline > online) {
-                console.log('retrieved reviews from IDB')
-                //sync IDB with Server
-                let result = offline.filter(o1 => !online.some(o2 => o1.id === o2.id));
-                result.forEach((ok) => {
-                  fetch('http://localhost:1337/reviews/?restaurant_id=' + self.restaurant.id, {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json; charset=utf-8"
-                    },
-                    body: JSON.stringify(ok)
-                  })
-                  
-                })
-                offline.forEach((all) => {
-                  createReviewHTML(all)
-                })
-              }
+
             })
-            
         } else {
           online.forEach((all) => {
             createReviewHTML(all)
@@ -346,6 +381,61 @@ fillReviewsHTML = (restaurant = self.restaurant) => {
         })
       })
   }
+
+
+  var values = {};
+  let result = online.filter((item) => {
+      var val = item.id;
+      var exists = values.id;
+      values[val] = true;
+      return !exists;
+  });
+  console.log(values)
+  console.log(result)
+
+
+  
+  if (navigator.onLine) {
+    setTimeout(() => {
+      if (online > offline) {
+        console.log(online)
+        console.log(offline)
+        console.log('retrieved reviews from the server')
+        //sync server with IDB
+        let result = online.filter(o1 => !offline.some(o2 => o1.id === o2.id));
+        result.forEach((ok) => {
+          dbPromise.then((db) => {
+            const tx = db.transaction('reviews', 'readwrite')
+            const keyValStore = tx.objectStore('reviews')
+            return keyValStore.put(ok)
+          })
+        })
+        online.forEach((all) => {
+          createReviewHTML(all)
+        })
+      } else if (offline >= online) {
+        console.log('retrieved reviews from IDB')
+        console.log(online)
+        console.log(offline)
+        //sync IDB with Server
+        let result = offline.filter(o1 => !online.some(o2 => o1.id === o2.id));
+        result.forEach((ok) => {
+          fetch('http://localhost:1337/reviews/?restaurant_id=' + self.restaurant.id, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            body: JSON.stringify(ok)
+          })
+
+        })
+        offline.forEach((all) => {
+          createReviewHTML(all)
+        })
+      }
+    }, 500)
+  }
+
 
 }
 
@@ -393,8 +483,10 @@ individualReview = (review, li) => {
 
   const editReview = document.createElement('button')
   editReview.className = 'edit'
-
-  editReview.innerHTML = '✎'
+  const image = document.createElement('img')
+  image.src = '../build/images/logo.svg'
+  image.alt = 'edit review'
+  editReview.append(image)
 
 
   editReview.addEventListener('click', () => {
@@ -403,15 +495,33 @@ individualReview = (review, li) => {
       if (navigator.onLine) {
         deleteData('http://localhost:1337/reviews/' + review.id, review.id)
           .then((response) => {
+            // delete from IDB
             dbPromise.then((db) => {
                 const tx = db.transaction('reviews', 'readwrite')
                 const keyValStore = tx.objectStore('reviews')
-                return keyValStore.delete(response.id)
+                return keyValStore.getAll();
               })
-              .then(() => {
-                location.reload();
+              .then((all) => {
+                all.forEach((check) => {
+                  if (check.id === review.id) {
+                    dbPromise.then((db) => {
+                        const tx = db.transaction('reviews', 'readwrite')
+                        const keyValStore = tx.objectStore('reviews')
+                        return keyValStore.delete(check.id)
+                      })
+                      .then(() => {
+                        console.log('removed from IDB')
+                        window.location.reload();
+                      })
+                  } else {
+                    window.location.reload();
+                  }
+                })
+
               })
           })
+
+
       } else {
         console.log('you are offline. You cannot delete')
       }
@@ -516,20 +626,39 @@ reviewForm = () => {
 
     if (navigator.onLine) {
       //sending it to server
-      postData('http://localhost:1337/reviews/', formSubmit)
-        .then((data) => console.log(
-          JSON.stringify(data)))
-        .then((data) => {
-          //make sure you send it to IDB too
-          dbPromise.then((db) => {
-            const tx = db.transaction('reviews', 'readwrite')
-            const keyValStore = tx.objectStore('reviews')
-            keyValStore.put(formSubmit)
-          })
-          individualReview(formSubmit)
-        })
+      let dup;
 
-        .catch(error => console.error(error))
+      fetch('http://localhost:1337/reviews/')
+      .then((data) => {
+        return data.json();
+      })
+      .then((datas) => {
+        datas.forEach((indi) => {
+          if (indi.id === formSubmit.id) {
+            console.log('uh oh')
+            dup = true;
+          }
+          else {
+            dup = false;
+          }
+        })
+      })
+      
+      // postData('http://localhost:1337/reviews/', formSubmit)
+      //   .then((data) => console.log(
+      //     JSON.stringify(data)))
+      //   .then((data) => {
+      //     //make sure you send it to IDB too
+      //     dbPromise.then((db) => {
+      //       const tx = db.transaction('reviews', 'readwrite')
+      //       const keyValStore = tx.objectStore('reviews')
+      //       keyValStore.put(formSubmit)
+      //     })
+      //     individualReview(formSubmit)
+      //     window.location.reload();
+      //   })
+
+        // .catch(error => console.error(error))
     } else {
       //only sending it to IDB
       console.log('Submitted Review to IDB')
