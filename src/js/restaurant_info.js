@@ -22,6 +22,7 @@ DBclean = () => {
         return response.json();
       })
       .then((data) => {
+
         data.forEach((empties) => {
           //let's first delete the empty names
           if (empties.name === undefined || empties.name === '') {
@@ -52,8 +53,6 @@ DBclean = () => {
           })
       })
   }
-
-  
 
 
 }
@@ -231,6 +230,7 @@ fillBreadcrumb = (restaurant = self.restaurant) => {
   });
 }
 
+
 createFavorites = (data) => {
 
   const yul = document.getElementById('navi-links')
@@ -251,7 +251,6 @@ createFavorites = (data) => {
     ul.append(li)
   })
   yul.append(ul)
-
 
   var uri = `${serverport}/restaurant.html?id=${data.id}`;
   var query = document.querySelectorAll('#navi-links a[href="' + uri + '"]');
@@ -322,24 +321,23 @@ fillReviewsHTML = (restaurant = self.restaurant) => {
 
   //online or offline
   if (navigator.onLine) {
-    fetch('http://localhost:1337/reviews/?restaurant_id=' + restaurant.id)
+    fetch('http://localhost:1337/reviews/')
       .then((response) => {
         return response.json()
       })
       .then((data) => {
-        
         reviews = data;
         reviews.forEach((review) => {
-          online.push(review)
-
-
-          //send it to IDB
-          if (IDBObjectStore) {
-            dbPromise.then((db) => {
-              const tx = db.transaction('reviews', 'readwrite');
-              const keyValStore = tx.objectStore('reviews');
-              return keyValStore.put(review)
-            })
+          if (review.restaurant_id === self.restaurant.id) {
+            online.push(review)
+            //send it to IDB
+            if (IDBObjectStore) {
+              dbPromise.then((db) => {
+                const tx = db.transaction('reviews', 'readwrite');
+                const keyValStore = tx.objectStore('reviews');
+                return keyValStore.put(review)
+              })
+            }
           }
         })
 
@@ -383,59 +381,52 @@ fillReviewsHTML = (restaurant = self.restaurant) => {
   }
 
 
-  var values = {};
-  let result = online.filter((item) => {
-      var val = item.id;
-      var exists = values.id;
-      values[val] = true;
-      return !exists;
-  });
-  console.log(values)
-  console.log(result)
-
-
-  
   if (navigator.onLine) {
     setTimeout(() => {
-      if (online > offline) {
-        console.log(online)
-        console.log(offline)
+      if (online.length > offline.length) {
         console.log('retrieved reviews from the server')
         //sync server with IDB
         let result = online.filter(o1 => !offline.some(o2 => o1.id === o2.id));
-        result.forEach((ok) => {
-          dbPromise.then((db) => {
-            const tx = db.transaction('reviews', 'readwrite')
-            const keyValStore = tx.objectStore('reviews')
-            return keyValStore.put(ok)
+        if (result.length > 0) {
+          result.forEach((ok) => {
+            dbPromise.then((db) => {
+              const tx = db.transaction('reviews', 'readwrite')
+              const keyValStore = tx.objectStore('reviews')
+              return keyValStore.put(ok)
+            })
           })
-        })
+        }
         online.forEach((all) => {
           createReviewHTML(all)
         })
-      } else if (offline >= online) {
+      } else if (offline.length >= online.length) {
         console.log('retrieved reviews from IDB')
-        console.log(online)
-        console.log(offline)
+
         //sync IDB with Server
         let result = offline.filter(o1 => !online.some(o2 => o1.id === o2.id));
-        result.forEach((ok) => {
-          fetch('http://localhost:1337/reviews/?restaurant_id=' + self.restaurant.id, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json; charset=utf-8"
-            },
-            body: JSON.stringify(ok)
-          })
+        if (result.length > 0) {
+          result.forEach((ok) => {
 
-        })
+            //add the difference to server
+            //first check to see if it's already in there
+
+            fetch('http://localhost:1337/reviews/', {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json; charset=utf-8"
+              },
+              body: JSON.stringify(ok)
+            })
+            online.push(ok)
+          })
+        }
         offline.forEach((all) => {
           createReviewHTML(all)
         })
-      }
-    }, 500)
-  }
 
+      }
+    }, 1500)
+  }
 
 }
 
@@ -474,6 +465,7 @@ individualReview = (review, li) => {
   name.className = 'revName';
   name.innerHTML = review.name;
   li.appendChild(name);
+
 
   const rating = document.createElement('p');
   rating.className = 'revRate';
@@ -608,7 +600,93 @@ reviewForm = () => {
 
   const submit = document.getElementById('review-submit');
   const name = document.getElementById('name');
+  let count = 0;
+  //STARS RATING
   const rating = document.getElementById('rating')
+  const stars1 = document.createElement('input')
+  stars1.type = 'checkbox'
+  stars1.className = `stars 1`;
+
+
+  const stars2 = stars1.cloneNode(true)
+  stars2.className = 'stars 2'
+  const stars3 = stars1.cloneNode(true)
+  stars3.className = 'stars 3'
+  const stars4 = stars1.cloneNode(true)
+  stars4.className = 'stars 4'
+  const stars5 = stars1.cloneNode(true)
+  stars5.className = 'stars 5'
+  let checked = [stars1, stars2, stars3, stars4, stars5];
+
+  starsManip = (x, y) => {
+    checked.forEach((check) => {
+      stars1.addEventListener(x, () => {
+        stars1.checked = true;
+        stars2.checked = false;
+        stars3.checked = false;
+        stars4.checked = false;
+        stars5.checked = false;
+        if (y === true) {
+          rating.value = 1;
+        }
+      })
+      stars2.addEventListener(x, () => {
+        stars1.checked = true;
+        stars2.checked = true;
+        stars3.checked = false;
+        stars4.checked = false;
+        stars5.checked = false;
+        if (y === true) {
+          rating.value = 2;
+        }
+      })
+      stars3.addEventListener(x, () => {
+        stars1.checked = true;
+        stars2.checked = true;
+        stars3.checked = true;
+        stars4.checked = false;
+        stars5.checked = false;
+        if (y === true) {
+          rating.value = 3;
+        }
+      })
+      stars4.addEventListener(x, () => {
+        stars1.checked = true;
+        stars2.checked = true;
+        stars3.checked = true;
+        stars4.checked = true;
+        stars5.checked = false;
+        if (y === true) {
+          rating.value = 4;
+        }
+      })
+      stars5.addEventListener(x, () => {
+        stars1.checked = true;
+        stars2.checked = true;
+        stars3.checked = true;
+        stars4.checked = true;
+        stars5.checked = true;
+        if (y === true) {
+          rating.value = 5;
+        }
+      })
+
+    })
+  }
+ 
+  starsManip('click', true)
+
+
+
+
+  rating.append(stars1)
+  rating.append(stars2)
+  rating.append(stars3)
+  rating.append(stars4)
+  rating.append(stars5)
+
+
+
   const review = document.getElementById('your-review')
   submit.type = 'submit'
 
@@ -624,41 +702,31 @@ reviewForm = () => {
       "comments": review.value
     }
 
+
     if (navigator.onLine) {
       //sending it to server
-      let dup;
 
-      fetch('http://localhost:1337/reviews/')
-      .then((data) => {
-        return data.json();
-      })
-      .then((datas) => {
-        datas.forEach((indi) => {
-          if (indi.id === formSubmit.id) {
-            console.log('uh oh')
-            dup = true;
-          }
-          else {
-            dup = false;
-          }
-        })
-      })
-      
-      // postData('http://localhost:1337/reviews/', formSubmit)
-      //   .then((data) => console.log(
-      //     JSON.stringify(data)))
-      //   .then((data) => {
-      //     //make sure you send it to IDB too
-      //     dbPromise.then((db) => {
-      //       const tx = db.transaction('reviews', 'readwrite')
-      //       const keyValStore = tx.objectStore('reviews')
-      //       keyValStore.put(formSubmit)
-      //     })
-      //     individualReview(formSubmit)
-      //     window.location.reload();
-      //   })
-
-        // .catch(error => console.error(error))
+      setTimeout(() => {
+        if (formSubmit.name !== "") {
+          console.log('is this duped')
+          postData('http://localhost:1337/reviews/', formSubmit)
+            .then((data) => console.log(
+              JSON.stringify(data)))
+            .then((data) => {
+              //make sure you send it to IDB too
+              dbPromise.then((db) => {
+                const tx = db.transaction('reviews', 'readwrite')
+                const keyValStore = tx.objectStore('reviews')
+                keyValStore.put(formSubmit)
+              })
+              individualReview(formSubmit)
+              window.location.reload();
+            })
+            .catch(error => console.error(error))
+        } else {
+          alert('Sorry, you need to enter a name!')
+        }
+      }, 2000)
     } else {
       //only sending it to IDB
       console.log('Submitted Review to IDB')
@@ -670,7 +738,6 @@ reviewForm = () => {
       })
     }
   })
-
 }
 
 

@@ -8,19 +8,19 @@ is divided into 3 stages and each will have their own requirement.
 
 === Restaurant Review Stage 2
 * Application Data and Offline Use.
-** [ ] Application Data Source - Client application should pull restaurant data from the development server, parse
+** [x] Application Data Source - Client application should pull restaurant data from the development server, parse
 , and use the information to render the appropriate sections of the application UI. 
-** [ ] Offline Use - The client application works offline. JSON responses are cached 
+** [x] Offline Use - The client application works offline. JSON responses are cached 
 using IndexedDB API. Any data previously accessed while connected is reachable while offline. 
 
 * Responsive Design and Accessibility 
-** [ ] Responsive Design - The application maintains a responsive design on mobile, tablet and desktop viewports.
-** [ ] Accessibility - The application retains accessibility features from Stage 1. Images have alternative text, the application uses appropriate focus managment for navigation, and semantic elements and ARIA attributes are used correctly.
+** [x] Responsive Design - The application maintains a responsive design on mobile, tablet and desktop viewports.
+** [x] Accessibility - The application retains accessibility features from Stage 1. Images have alternative text, the application uses appropriate focus managment for navigation, and semantic elements and ARIA attributes are used correctly.
 
 * Performance - Lighthouse targets for each category:
-** [ ] PWA > 90
-** [ ] Performance > 70
-** [ ] Accessibility > 90
+** [x] PWA > 90
+** [x] Performance > 70
+** [x] Accessibility > 90
 
 === Restaurant Review Stage 1
 This is the current state of the Restaurant Review Project.
