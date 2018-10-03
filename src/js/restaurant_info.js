@@ -726,7 +726,7 @@ reviewForm = () => {
         } else {
           alert('Sorry, you need to enter a name!')
         }
-      }, 2000)
+      }, 1000)
     } else {
       //only sending it to IDB
       console.log('Submitted Review to IDB')
