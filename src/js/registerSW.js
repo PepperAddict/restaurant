@@ -1,3 +1,5 @@
+
+
 // registering Service Worker
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
@@ -54,7 +56,7 @@ handleFavorites = async (restaurant, fav) => {
     }
     let favy;
     if (fav.checked) {
-        await fetch(url, config)
+        fetch(url, config)
             .then((response => response.json()))
             .then((json) => {
                 favy = json;
@@ -64,8 +66,9 @@ handleFavorites = async (restaurant, fav) => {
                     return keyValStore.put(favy)
                 })
             })
+            
     } else {
-        await fetch(urlTwo, config)
+        fetch(urlTwo, config)
             .then((response) => response.json())
             .then((json) => {
                 favy = json;
@@ -78,6 +81,7 @@ handleFavorites = async (restaurant, fav) => {
     }
 }
 storeFavorites = () => {
+    //store favorites to IDB
     fetch('http://localhost:1337/restaurants/?is_favorite=true')
         .then((response) => {
             return response.json()
@@ -92,11 +96,5 @@ storeFavorites = () => {
             })
         })
 }
+
 storeFavorites();
-
-
-messageToREFRESH = () => {
-  if (confirm('This page is out of date! Please refresh the page to update.')) {
-      window.location.reload();
-  }
-}

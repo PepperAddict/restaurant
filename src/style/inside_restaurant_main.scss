@@ -33,12 +33,12 @@
 
    @media(min-width: 1080px) {
      main {
-      display: flex;
-      position: relative;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: repeat(10, auto);
-      align-items: start;
-      box-sizing: border-box;
+       display: flex;
+       position: relative;
+       grid-template-columns: 1fr 1fr;
+       grid-template-rows: repeat(10, auto);
+       align-items: start;
+       box-sizing: border-box;
      }
    }
 
@@ -115,6 +115,7 @@
  #reviews-container {
    box-sizing: border-box;
    width: 100%;
+
    form {
      grid-row: 3;
      grid-gap: 15px;
@@ -123,13 +124,41 @@
      padding: 10px 30px 100px;
      background: var(--dark-gray);
      color: white;
+
      #rating {
-       width: 100px;
+       width: 150px;
+       display: grid;
+       grid-template-columns: repeat(5, auto);
+
+       .stars {
+         display: grid;
+         grid-template-columns: 1fr;
+         height: 40px;
+         width: 40px;
+         visibility: hidden;
+
+         &:checked:before {
+          background: url('../images/star.svg');
+
+         }
+
+         &:before {
+           background: url('../images/star.svg');
+           content: '';
+           width: 100%;
+           height: 100%;
+           visibility: visible;
+           .svy {
+             fill: red !important;
+           }
+         }
+       }
      }
-     
+
      h3 {
        border-bottom: 1px solid white;
      }
+
      #review-submit {
        background: var(--mid-blue);
        text-transform: uppercase;
@@ -147,21 +176,23 @@
  .inside {
    width: 100%;
    height: 100%;
-  #maincontent {
+
+   #maincontent {
      h2 {
-     padding-left: 3%;
-     text-align: left;
-     background: var(--pink);
-     color: white;
-     width: 100%;
-     box-sizing: border-box;
-     height: auto;
-     @media (max-width: 700px) {
-       text-align: center;
-       padding-left: 0px;
+       padding-left: 3%;
+       text-align: left;
+       background: var(--pink);
+       color: white;
+       width: 100%;
+       box-sizing: border-box;
+       height: auto;
+
+       @media (max-width: 700px) {
+         text-align: center;
+         padding-left: 0px;
+       }
      }
    }
-  }
 
    #maincontent {
      display: grid;
