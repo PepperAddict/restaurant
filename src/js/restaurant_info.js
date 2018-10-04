@@ -263,24 +263,15 @@ createFavorites = (data) => {
 
 showFavorites = () => {
 
-  if (navigator.onLine) {
-    fetch('http://localhost:1337/restaurants/?is_favorite=true')
-      .then((response) => {
-        return response.json()
-      })
-      .then((datas) => {
-        createFavorites(datas);
-      })
-  } else {
-    dbPromise.then((db) => {
-        const tx = db.transaction('favorites');
-        const keyValStore = tx.objectStore('favorites')
-        return keyValStore.getAll();
-      })
-      .then((stuff) => {
-        createFavorites(stuff)
-      })
-  }
+  dbPromise.then((db) => {
+      const tx = db.transaction('favorites');
+      const keyValStore = tx.objectStore('favorites')
+      return keyValStore.getAll();
+    })
+    .then((stuff) => {
+      createFavorites(stuff)
+    })
+
 }
 
 
@@ -406,10 +397,7 @@ fillReviewsHTML = (restaurant = self.restaurant) => {
         let result = offline.filter(o1 => !online.some(o2 => o1.id === o2.id));
         if (result.length > 0) {
           result.forEach((ok) => {
-
             //add the difference to server
-            //first check to see if it's already in there
-
             fetch('http://localhost:1337/reviews/', {
               method: "POST",
               headers: {
@@ -477,9 +465,8 @@ individualReview = (review, li) => {
   editReview.className = 'edit'
   const image = document.createElement('img')
   image.src = '../build/images/logo.svg'
-  image.alt = 'edit review'
+  image.alt = 'edit or remove review'
   editReview.append(image)
-
 
   editReview.addEventListener('click', () => {
     const deletes = document.getElementById('delete-review')
@@ -547,19 +534,45 @@ individualReview = (review, li) => {
       }
       if (navigator.onLine) {
         //delete first
-        deleteData('http://localhost:1337/reviews/' + review.id, review.id)
-          .then((response) => {
-            dbPromise.then((db) => {
-              const tx = db.transaction('reviews', 'readwrite')
-              const keyValStore = tx.objectStore('reviews')
-              return keyValStore.delete(response.id)
+        console.log(review.id)
+        const url = 'http://localhost:1337/reviews/'
+        if (review.id) {
+          deleteData(url + review.id, review.id)
+            .then((response) => {
+              dbPromise.then((db) => {
+                const tx = db.transaction('reviews', 'readwrite')
+                const keyValStore = tx.objectStore('reviews')
+                return keyValStore.delete(response.id)
+              })
             })
-          })
-        //create new review in its place
-        postData('http://localhost:1337/reviews/', formSubmit)
-          .then((data) => console.log(
-            JSON.stringify(data)))
-          .catch(error => console.error(error))
+            .then(() => {
+              //create new review in its place
+              setTimeout(() => {
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                      "Content-Type": "application/json; charset=utf-8"
+                    },
+                    body: JSON.stringify(formSubmit)
+                  })
+                  .then(() => {
+                    dbPromise.then((db) => {
+                      const tx = db.transaction('reviews', 'readwrite')
+                      const keyValStore = tx.objectStore('reviews')
+                      return keyValStore.put(formSubmit)
+                    })
+                  })
+                  .then(() => {
+                    //okay now refresh once everything is finished 
+                    window.location.reload();
+                  })
+              }, 1000)
+            })
+            .catch((error) => {
+              console.log('uh oh ' + error)
+            })
+        }
+
       } else {
         alert('You have to be online to edit your review!')
       }
@@ -615,7 +628,7 @@ reviewForm = () => {
   stars5.className = 'stars 5'
   let checked = [stars1, stars2, stars3, stars4, stars5];
 
-  starsManip = (x, y) => {
+  starsManip = (x, y, check) => {
     checked.forEach((check) => {
       stars1.addEventListener(x, () => {
         stars1.checked = true;
@@ -667,10 +680,9 @@ reviewForm = () => {
           rating.value = 5;
         }
       })
-
+  
     })
   }
- 
   starsManip('click', true)
 
 
@@ -703,8 +715,8 @@ reviewForm = () => {
       //sending it to server
       setTimeout(() => {
 
-        
-        if (formSubmit.name !== "" || formSubmit.rating !== undefined ) {
+
+        if (formSubmit.name !== "" || formSubmit.rating !== undefined) {
           postData('http://localhost:1337/reviews/', formSubmit)
             .then((data) => console.log(
               JSON.stringify(data)))
