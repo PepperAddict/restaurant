@@ -8,7 +8,7 @@ let toCache = [
     './src/js/dbhelper.js',
     './src/js/index.js',
     './src/js/restaurant_info.js',
-    './src/js/registerSW.js',
+    './src/js/loadFirst.js',
     'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
     'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js'
 ]
@@ -20,7 +20,7 @@ self.addEventListener('install', (event) => {
             return cache.addAll(toCache)
         })
         .catch(err => {
-            console.log('no worky' + err)
+            console.log('no worky: ' + err)
         })
     )
     if (navigator.onLine) {
