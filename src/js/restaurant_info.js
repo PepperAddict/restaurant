@@ -425,7 +425,7 @@ fillReviewsHTML = (restaurant = self.restaurant) => {
         })
 
       }
-    }, 1500)
+    }, 500)
   }
 
 }
@@ -515,7 +515,7 @@ individualReview = (review, li) => {
 
 
       } else {
-        console.log('you are offline. You cannot delete')
+        alert('You have to be online to delete your review!')
       }
     })
     const edit = document.getElementById('edit')
@@ -559,12 +559,9 @@ individualReview = (review, li) => {
         postData('http://localhost:1337/reviews/', formSubmit)
           .then((data) => console.log(
             JSON.stringify(data)))
-          .then((e) => {
-            location.reload();
-          })
           .catch(error => console.error(error))
       } else {
-        console.log('you are offline')
+        alert('You have to be online to edit your review!')
       }
 
     })
@@ -702,13 +699,12 @@ reviewForm = () => {
       "comments": review.value
     }
 
-
     if (navigator.onLine) {
       //sending it to server
-
       setTimeout(() => {
-        if (formSubmit.name !== "") {
-          console.log('is this duped')
+
+        
+        if (formSubmit.name !== "" || formSubmit.rating !== undefined ) {
           postData('http://localhost:1337/reviews/', formSubmit)
             .then((data) => console.log(
               JSON.stringify(data)))
@@ -724,7 +720,7 @@ reviewForm = () => {
             })
             .catch(error => console.error(error))
         } else {
-          alert('Sorry, you need to enter a name!')
+          alert('Please fill in your name and rating')
         }
       }, 1000)
     } else {
