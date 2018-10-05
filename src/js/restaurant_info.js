@@ -121,7 +121,6 @@ mapFallback = () => {
   mapF.className = 'mapFallback'
 }
 
-
 /**
  * Create restaurant HTML and add it to the webpage
  */
@@ -138,11 +137,18 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   fav.addEventListener('click', () => {
     handleFavorites(restaurant, fav);
   })
-  if (restaurant.is_favorite == 'true') {
-    fav.checked = true
-  } else {
-    fav.checked = false;
-  }
+  fetch('http://localhost:1337/restaurants/?is_favorite=true')
+  .then((response) => {
+    return response.json();
+  })
+  .then((data) => {
+    data.forEach((favs) => {
+      if (favs.id === restaurant.id) {
+        fav.checked = true;
+      }
+    })
+  })
+
   div.append(fav)
 
   const address = document.getElementById('rest-address');
@@ -262,6 +268,11 @@ createFavorites = (data) => {
 }
 
 showFavorites = () => {
+  let online;
+  let offline;
+  fetch('http://localhost:1337/restaurants/?is_favorite=true')
+    .then((response) => response.json())
+    .then((data) => online = data)
 
   dbPromise.then((db) => {
       const tx = db.transaction('favorites');
@@ -269,9 +280,23 @@ showFavorites = () => {
       return keyValStore.getAll();
     })
     .then((stuff) => {
-      createFavorites(stuff)
+      offline = stuff;
     })
 
+  setTimeout(() => {
+    if (online.length > offline.length) {
+      online.forEach((indi) => {
+        dbPromise.then((db) => {
+          const tx = db.transaction('favorites', 'readwrite');
+          const keyValStore = tx.objectStore('favorites')
+          return keyValStore.put(indi)
+        })
+      })
+    }
+    else {
+      createFavorites(offline)
+    }
+  }, 400)
 }
 
 
@@ -455,9 +480,30 @@ individualReview = (review, li) => {
   li.appendChild(name);
 
 
-  const rating = document.createElement('p');
+  const rating = document.createElement('div');
+  rating.value = review.rating;
+  const ratingstars1 = document.createElement('img')
+  ratingstars1.src = '/build/images/star.svg'
+  ratingstars1.className = 'stars 1'
+  let ratingstars2 = ratingstars1.cloneNode(true)
+  ratingstars2.className = 'stars 2'
+  let ratingstars3 = ratingstars1.cloneNode(true)
+  ratingstars3.className = 'stars 3'
+  let ratingstars4 = ratingstars1.cloneNode(true)
+  ratingstars4.className = 'stars 4'
+  let ratingstars5 = ratingstars1.cloneNode(true)
+  ratingstars5.className = 'stars 5'
+
+  starsManip('onload', ratingstars1, ratingstars2, ratingstars3, ratingstars4, ratingstars5, rating, 'mini')
+
+  rating.append(ratingstars1)
+  rating.append(ratingstars2)
+  rating.append(ratingstars3)
+  rating.append(ratingstars4)
+  rating.append(ratingstars5)
   rating.className = 'revRate';
-  rating.innerHTML = `Rating: ${review.rating}`;
+
+
   li.appendChild(rating);
 
 
@@ -499,8 +545,6 @@ individualReview = (review, li) => {
 
               })
           })
-
-
       } else {
         alert('You have to be online to delete your review!')
       }
@@ -516,7 +560,29 @@ individualReview = (review, li) => {
     const ename = document.getElementById('ename');
     ename.value = review.name;
     const erating = document.getElementById('erating');
+    const estars1 = document.createElement('input')
+    estars1.type = 'checkbox'
+    estars1.className = 'stars 1';
+
+    let estars2 = estars1.cloneNode(true)
+    estars2.className = 'stars 2'
+    let estars3 = estars1.cloneNode(true)
+    estars3.className = 'stars 3'
+    let estars4 = estars1.cloneNode(true)
+    estars4.className = 'stars 4'
+    let estars5 = estars1.cloneNode(true)
+    estars5.className = 'stars 5'
     erating.value = review.rating;
+
+    starsManip('click', estars1, estars2, estars3, estars4, estars5, erating, 'run');
+    starsManip('onload', estars1, estars2, estars3, estars4, estars5, erating, 'show');
+
+    erating.append(estars1)
+    erating.append(estars2)
+    erating.append(estars3)
+    erating.append(estars4)
+    erating.append(estars5)
+
     const ereview = document.getElementById('eyour-review');
     ereview.value = review.comments
     const esub = document.getElementById('edit-submit')
@@ -606,94 +672,161 @@ createReviewHTML = (review) => {
   return container;
 }
 
+
+starsManip = (x, one, two, three, four, five, rating, run) => {
+  // OMG IS THERE A BETTER WAY???
+  oney = () => {
+    one.checked = true;
+    two.checked = false;
+    three.checked = false;
+    four.checked = false;
+    five.checked = false;
+  }
+  twoy = () => {
+    one.checked = true;
+    two.checked = true;
+    three.checked = false;
+    four.checked = false;
+    five.checked = false;
+  }
+  threey = () => {
+    one.checked = true;
+    two.checked = true;
+    three.checked = true;
+    four.checked = false;
+    five.checked = false;
+  }
+  foury = () => {
+    one.checked = true;
+    two.checked = true;
+    three.checked = true;
+    four.checked = true;
+    five.checked = false;
+  }
+  fivey = () => {
+    one.checked = true;
+    two.checked = true;
+    three.checked = true;
+    four.checked = true;
+    five.checked = true;
+  }
+
+  if (run === 'run') {
+    one.addEventListener(x, () => {
+      one.checked = true;
+      two.checked = false;
+      three.checked = false;
+      four.checked = false;
+      five.checked = false;
+      rating.value = 1;
+    })
+    two.addEventListener(x, () => {
+      one.checked = true;
+      two.checked = true;
+      three.checked = false;
+      four.checked = false;
+      five.checked = false;
+      rating.value = 2;
+    })
+    three.addEventListener(x, () => {
+      one.checked = true;
+      two.checked = true;
+      three.checked = true;
+      four.checked = false;
+      five.checked = false;
+      rating.value = 3;
+    })
+    four.addEventListener(x, () => {
+      one.checked = true;
+      two.checked = true;
+      three.checked = true;
+      four.checked = true;
+      five.checked = false;
+      rating.value = 4;
+    })
+    five.addEventListener(x, () => {
+      one.checked = true;
+      two.checked = true;
+      three.checked = true;
+      four.checked = true;
+      five.checked = true;
+      rating.value = 5;
+    })
+  } else if (run === 'show') {
+    if (rating.value === 1) {
+      oney();
+      one.className = 'stars active'
+    } else if (rating.value === 2) {
+      twoy();
+      two.className = 'stars active'
+    } else if (rating.value === 3) {
+      threey();
+      three.className = 'stars active'
+    } else if (rating.value === 4) {
+      foury();
+      four.className = 'stars active'
+    } else if (rating.value === 5) {
+      fivey();
+    }
+  } else if (run === 'mini') {
+    if (rating.value === 1) {
+      one.className = 'stars active'
+      two.className = 'stars'
+      three.className = 'stars'
+      four.className = 'stars'
+    } else if (rating.value === 2) {
+      one.className = 'stars active'
+      two.className = 'stars active'
+      three.className = 'stars'
+      four.className = 'stars'
+      five.className = 'stars'
+    } else if (rating.value === 3) {
+      one.className = 'stars active'
+      two.className = 'stars active'
+      three.className = 'stars active'
+      four.className = 'stars'
+      five.className = 'stars'
+    } else if (rating.value === 4) {
+      one.className = 'stars active'
+      two.className = 'stars active'
+      three.className = 'stars active'
+      four.className = 'stars active'
+      five.className = 'stars'
+    } else if (rating.value === 5) {
+      one.className = 'stars active'
+      two.className = 'stars active'
+      three.className = 'stars active'
+      four.className = 'stars active'
+      five.className = 'stars active'
+    }
+  }
+}
+
 reviewForm = () => {
 
   const submit = document.getElementById('review-submit');
   const name = document.getElementById('name');
-  let count = 0;
+
   //STARS RATING
-  const rating = document.getElementById('rating')
+  const disrating = document.getElementById('rating')
   const stars1 = document.createElement('input')
   stars1.type = 'checkbox'
   stars1.className = `stars 1`;
-
-
-  const stars2 = stars1.cloneNode(true)
+  let stars2 = stars1.cloneNode(true)
   stars2.className = 'stars 2'
-  const stars3 = stars1.cloneNode(true)
+  let stars3 = stars1.cloneNode(true)
   stars3.className = 'stars 3'
-  const stars4 = stars1.cloneNode(true)
+  let stars4 = stars1.cloneNode(true)
   stars4.className = 'stars 4'
-  const stars5 = stars1.cloneNode(true)
+  let stars5 = stars1.cloneNode(true)
   stars5.className = 'stars 5'
-  let checked = [stars1, stars2, stars3, stars4, stars5];
+  starsManip('click', stars1, stars2, stars3, stars4, stars5, disrating, 'run')
 
-  starsManip = (x, y, check) => {
-    checked.forEach((check) => {
-      stars1.addEventListener(x, () => {
-        stars1.checked = true;
-        stars2.checked = false;
-        stars3.checked = false;
-        stars4.checked = false;
-        stars5.checked = false;
-        if (y === true) {
-          rating.value = 1;
-        }
-      })
-      stars2.addEventListener(x, () => {
-        stars1.checked = true;
-        stars2.checked = true;
-        stars3.checked = false;
-        stars4.checked = false;
-        stars5.checked = false;
-        if (y === true) {
-          rating.value = 2;
-        }
-      })
-      stars3.addEventListener(x, () => {
-        stars1.checked = true;
-        stars2.checked = true;
-        stars3.checked = true;
-        stars4.checked = false;
-        stars5.checked = false;
-        if (y === true) {
-          rating.value = 3;
-        }
-      })
-      stars4.addEventListener(x, () => {
-        stars1.checked = true;
-        stars2.checked = true;
-        stars3.checked = true;
-        stars4.checked = true;
-        stars5.checked = false;
-        if (y === true) {
-          rating.value = 4;
-        }
-      })
-      stars5.addEventListener(x, () => {
-        stars1.checked = true;
-        stars2.checked = true;
-        stars3.checked = true;
-        stars4.checked = true;
-        stars5.checked = true;
-        if (y === true) {
-          rating.value = 5;
-        }
-      })
-  
-    })
-  }
-  starsManip('click', true)
-
-
-
-
-  rating.append(stars1)
-  rating.append(stars2)
-  rating.append(stars3)
-  rating.append(stars4)
-  rating.append(stars5)
-
+  disrating.append(stars1)
+  disrating.append(stars2)
+  disrating.append(stars3)
+  disrating.append(stars4)
+  disrating.append(stars5)
 
 
   const review = document.getElementById('your-review')
