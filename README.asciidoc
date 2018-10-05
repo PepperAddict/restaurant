@@ -5,6 +5,7 @@
 Hello! This is my Udacity Mobile Web Restaurant Review Project! This project was created by Udacity and 
 I am required to modify the page by following the guidelines to pass the tests. The project 
 is divided into 3 stages and each will have their own requirement. 
+
 === Restaurant Review Stage 3
 * Functionality 
 ** [ ] User Interface - Users are able to mark a restaurant as a favorite, this toggle is visible
