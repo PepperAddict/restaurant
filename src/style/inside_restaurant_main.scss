@@ -125,33 +125,7 @@
      background: var(--dark-gray);
      color: white;
 
-     #rating {
-       width: 150px;
-       display: grid;
-       grid-template-columns: repeat(5, auto);
 
-       .stars {
-         display: grid;
-         grid-template-columns: 1fr;
-         height: 40px;
-         width: 40px;
-         visibility: hidden;
-
-         &:checked:before {
-          background: url('../images/star.svg');
-
-         }
-
-         &:before {
-           background-image: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="40" height="40" viewBox="0 0 52.916666 52.916666" version="1.1" style="fill: darkgray;"> <g transform="translate(0,-244.08334)"> <path d="m 11.593236,285.7084 c 0.575285,-4.61167 1.062517,-8.49356 1.082737,-8.62646 0.03457,-0.22705 -0.320754,-0.62318 -5.9063589,-6.585 -3.268719,-3.48888 -5.91821138,-6.36423 -5.88776248,-6.38967 0.030443,-0.0254 3.81719018,-0.76432 8.41497988,-1.64197 4.5977875,-0.87766 8.4183205,-1.61237 8.4900685,-1.6327 0.0759,-0.0215 1.884761,-3.21841 4.325357,-7.64445 2.307198,-4.18411 4.205868,-7.60749 4.219265,-7.60749 0.0134,0 1.912067,3.42338 4.219264,7.60749 2.440599,4.42604 4.24946,7.62295 4.325358,7.64445 0.07175,0.0204 3.892279,0.75504 8.490068,1.6327 4.597789,0.87765 8.384529,1.61655 8.414979,1.64197 0.03045,0.0254 -2.619044,2.90079 -5.887761,6.38967 -5.585603,5.96182 -5.940912,6.35795 -5.906357,6.585 0.172463,1.13336 2.117116,17.00027 2.083554,17.00027 -0.02408,0 -3.57029,-1.65317 -7.880478,-3.67369 l -7.836707,-3.67371 -0.444714,0.19539 c -0.244591,0.10752 -3.745183,1.74633 -7.779094,3.64194 -4.033909,1.89559 -7.390179,3.4633 -7.458376,3.48384 -0.104942,0.0316 0.03678,-1.25148 0.921978,-8.34758 z" id="path826" inkscape:connector-curvature="0" /> </g> </svg>');
-           content: '';
-           width: 100%;
-           height: 100%;
-           visibility: visible;
-
-         }
-       }
-     }
 
      h3 {
        border-bottom: 1px solid white;
