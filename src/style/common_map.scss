@@ -1,0 +1,36 @@
+.container #map {
+  height: 100% !important;
+  background-color: #ccc;
+  position: relative;
+  @media (max-width: 1023px) {
+    height: 500px !important;
+  }
+  & #map-container {
+    border-top: 5px solid var(--pink);
+    border-bottom: 5px solid var(--pink);
+    position: relative !important;
+    box-sizing: border-box;
+    display: none;
+    visibility: hidden;
+    z-index: 1;
+  }
+}
+
+.mapFallback {
+  width: 100%;
+  height: 100%;
+  font-size: 2em;
+  display: grid; 
+  justify-items: center;
+  align-items: center;
+  text-align: center;
+}
+.leaflet-control {
+  color: black !important;
+
+  a {
+    color: black !important;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+}

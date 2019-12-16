@@ -1,0 +1,43 @@
+.rest-head {
+    display: grid;
+    grid-template-columns: 1fr;
+
+    .favorite {
+        height: 40px;
+        width: 40px;
+        display: grid;
+        visibility: hidden;
+        cursor: pointer;
+
+        &:checked:before {
+            animation: sprite .7s steps(49) forwards;
+        }
+
+        &:before {
+            content: ' ';
+            visibility: visible;
+            background-image: url('../images/heart4.png');
+
+        }
+    }
+}
+
+.container {
+    .rest-head {
+        height: 80px;
+
+    }
+}
+
+.inside {
+
+    .rest-head {
+        height: 40px;
+    }
+}
+
+@keyframes sprite {
+    100% {
+        background-position: -1960px;
+    }
+}

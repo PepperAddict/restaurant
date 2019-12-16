@@ -1,0 +1,118 @@
+#edit.hide {
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+}
+#edit {
+  position: fixed;
+  width: 50%;
+  height: 50%;
+  z-index:10;
+  top: 0;
+  left: -990px;
+  background: var(--dark-gray);
+  display: grid;
+  form {
+    width: 80%;
+    height: 80%;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-rows: 50px 25px 35px 25px 35px 25px 150px;
+    justify-self: center;
+    align-self: center;
+    color: white;
+    max-width: 800px;
+    @media screen and (max-width: 700px) {
+      width: 100%;
+    }
+    .subdelete {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 50px;
+      grid-gap: 60px;
+      @media screen and (max-width: 700px) {
+        grid-gap: 5px;
+      }
+      #edit-submit, #delete-review {
+        cursor: pointer;
+        border: 0px;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: white;
+        letter-spacing: 2px;
+      }
+      #edit-submit {
+        background: #00a510;
+      }
+      #delete-review {
+        background: var(--dark-gray);
+        &:hover {
+          background: black;
+        }
+      }
+    }
+  }
+  #close {
+    position: absolute;
+    top: 0px;
+    right: 30px;
+    padding: 5px 25px 10px;
+    font-size: 60px;
+    line-height: 1em;
+    cursor: pointer;
+    background: var(--dark-gray);
+    color: white;
+    border-radius: 50%;
+  }
+}
+#reviews-list {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background: var(--dark-gray);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    button {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+    }
+  }
+  #reviews-list li {
+    background-color: var(--off-white);
+    display: block;
+    box-sizing: border-box;
+    list-style-type: none;
+    padding: 3%;
+    position: relative;
+    width: 100%;
+    border: 5px solid var(--dark-gray);
+    line-height: 1.2em;
+
+    .edit {
+      background: none;
+      border: 0px;
+      cursor: pointer;
+      font-size: 20px;
+      img {
+        width: 30px;
+        height: 30px;
+      }
+
+    }
+  }
+
+  #reviews-list .revComment {
+    border-top: 1px solid var(--mid-gray);
+    line-height: 1.2em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  .inside #reviews-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-start: 1;
+    grid-column-end: -1;
+  }
+

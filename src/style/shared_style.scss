@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css?family=Arya|Kanit:800');
+:root {
+    --main-bg-color: coral; 
+    --pink: #d20080;
+    --main-font-color: #323232;
+    --arya-font: 'Arya', sans-serif;
+    --off-white: #fdfdfd;
+    --dark-gray: #2b2b2b;
+    --cursive: 'Kanit', sans-serif;
+    --blue-color: #0398AD;
+    --yellow: #FFCA00;
+    --light-blue: #4DB3C2;
+    --mid-gray: #a6a6a6;
+    --mid-blue: #2981ca;
+  }
+  
+  body,td,th,p{
+      font-family: var(--arya-font);
+      line-height: 1.5;
+  }
+  
+  .hidethis {
+    position: absolute;
+    transform: translate(-39990px, 0);
+  }
+  
+  
+  article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+      display: block;
+  }
+
+  a {
+    color: var(--blue-color);
+    text-decoration: none;
+  }
+
+ footer {
+    color: var(--off-white);
+    font-size: 1.2rem;
+    padding: 0px;
+    text-align: center;
+    text-transform: uppercase;
+    background: var(--dark-gray);
+    margin-top: none;
+  }
+  #footer a {
+    color: var(--blue-color);
+    text-decoration: none;
+  }

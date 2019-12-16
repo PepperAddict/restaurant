@@ -1,0 +1,19 @@
+
+
+  @-webkit-keyframes mymove {
+    0%   {color: white;}
+    25%  {color: #d5d5d5; }
+    50%  {color: #cfcfcf;}
+    75%  {color: #d5d5d5; }
+    100% {color: white;}
+  }
+  
+  /* Standard syntax */
+  @keyframes mymove {
+    0%   {color: white;}
+    25%  {color: #d5d5d5; }
+    50%  {color: #cfcfcf;}
+    75%  {color: #d5d5d5; }
+    100% {color: white;}
+  
+  }
